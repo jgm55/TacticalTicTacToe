@@ -117,4 +117,8 @@ public class BlockController : MonoBehaviour {
 			block.highlightState = BlockHighlightState.NUETRAL;
 		}
 	}
+
+	public void simulateClick(){
+		OnMouseDown();
+	}
 }

@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class GameController : MonoBehaviour {
 
 	public enum PlayerTurn{X_TURN, O_TURN, NUETRAL, O_WINS, X_WINS};
-
+	
 	public PlayerTurn turn = PlayerTurn.X_TURN;
 	public GUIStyle style;
 
@@ -54,7 +54,18 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if(SceneProperties.aiPlaying){
+			if(turn == PlayerTurn.X_TURN){
+				//TODO update this to not always be x
+				Vector2 move = AI.makeMove(board,xPieces,this);
+				BlockController[] blocks = FindObjectsOfType<BlockController>();
+				foreach (BlockController block in blocks){
+					if(block.x == move.x && block.y == move.y){
+						block.simulateClick();
+					}
+				}
+			}
+		}
 	}
 
 	//Swapped x and y to match board representation
@@ -175,7 +186,7 @@ public class GameController : MonoBehaviour {
 	 * 
 	 * Return an ArrayList of Vector2 of x,y coordinates where can move
 	 * */
-	private ArrayList getMovePositions(int x, int y){
+	public ArrayList getMovePositions(int x, int y){
 		ArrayList positions = new ArrayList();
 		if(x-1 >= 0){
 			if(y-1 >= 0){
