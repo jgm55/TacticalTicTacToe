@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		xPiecesLeftPos = new Vector2(1280 - piecesLeftSize.x, 20);
+		xPiecesLeftPos = new Vector2(1280 - piecesLeftSize.x, FONT_SIZE);
 		oPiecesLeftPos = new Vector2(0, FONT_SIZE);
 		
 		resolution = new Vector2(Screen.width, Screen.height);
@@ -70,49 +70,50 @@ public class GameController : MonoBehaviour {
 
 	//Swapped x and y to match board representation
 	public void move(int y, int x, bool updateTurn){
-
-		if(board[x][y] == 0){
-			//1 for o, 2 for x
-			if(turn == PlayerTurn.O_TURN){
-				board[x][y] = 1;
-				oPieces--;
-				if(updateTurn){
-					turn = PlayerTurn.X_TURN;
+		if(turn != PlayerTurn.O_WINS && turn != PlayerTurn.X_WINS){
+			if(board[x][y] == 0){
+				//1 for o, 2 for x
+				if(turn == PlayerTurn.O_TURN){
+					board[x][y] = 1;
+					oPieces--;
+					if(updateTurn){
+						turn = PlayerTurn.X_TURN;
+					}
+				} else if(turn == PlayerTurn.X_TURN){
+					board[x][y] = 2;
+					xPieces--;
+					if(updateTurn){
+						turn = PlayerTurn.O_TURN;
+					}
 				}
-			} else if(turn == PlayerTurn.X_TURN){
-				board[x][y] = 2;
-				xPieces--;
-				if(updateTurn){
-					turn = PlayerTurn.O_TURN;
+			} else{ // It was removed
+				board[x][y] = 0;
+				if(turn == PlayerTurn.O_TURN){
+					oPieces++;
+					if(updateTurn){
+						turn = PlayerTurn.X_TURN;
+					}
+				} else if(turn == PlayerTurn.X_TURN){
+					xPieces++;
+					if(updateTurn){
+						turn = PlayerTurn.O_TURN;
+					}
 				}
 			}
-		} else{ // It was removed
-			board[x][y] = 0;
-			if(turn == PlayerTurn.O_TURN){
-				oPieces++;
-				if(updateTurn){
-					turn = PlayerTurn.X_TURN;
-				}
-			} else if(turn == PlayerTurn.X_TURN){
-				xPieces++;
-				if(updateTurn){
-					turn = PlayerTurn.O_TURN;
-				}
+
+			int result = checkWin(x,y);
+			if(1 == result){
+				//O wins
+				turn = PlayerTurn.O_WINS;
+			} else if(2 == result){
+				//x wins
+				turn = PlayerTurn.X_WINS;
 			}
-		}
 
-		int result = checkWin(x,y);
-		if(1 == result){
-			//O wins
-			turn = PlayerTurn.O_WINS;
-		} else if(2 == result){
-			//x wins
-			turn = PlayerTurn.X_WINS;
-		}
-
-		Debug.Log("Board");
-		for(int i=0;i<BOARD_SIZE;i++){
-			Debug.Log(board[i][0]+" "+board[i][1]+" "+board[i][2]+" "+board[i][3]);
+			Debug.Log("Board");
+			for(int i=0;i<BOARD_SIZE;i++){
+				Debug.Log(board[i][0]+" "+board[i][1]+" "+board[i][2]+" "+board[i][3]);
+			}
 		}
 	}
 
@@ -255,6 +256,12 @@ public class GameController : MonoBehaviour {
 		}
 		//TODO: display winner and lock game out
 		//TODO: add highlighting of winning path
+	}
+
+	void OnMouseDown(){
+		if(turn == PlayerTurn.O_WINS || turn == PlayerTurn.X_WINS){
+			Application.LoadLevel("TitleScreen");
+		}
 	}
 
 	/*public void remove(){
