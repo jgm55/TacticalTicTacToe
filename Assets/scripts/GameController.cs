@@ -13,6 +13,9 @@ public class GameController : MonoBehaviour {
 
 	public const int BOARD_SIZE = 4;
 
+	float doneCoooldown = 1;
+	float doneCounter = 0;
+
 	int [][] board;
 
 	//GUI Stuff
@@ -66,6 +69,13 @@ public class GameController : MonoBehaviour {
 				}
 			}
 		}
+
+		if(turn == PlayerTurn.O_WINS || turn == PlayerTurn.X_WINS){
+			if(Input.GetMouseButton(0) && doneCoooldown <= doneCounter){
+				Application.LoadLevel("TitleScreen");
+			}
+			doneCounter+=Time.deltaTime;
+		}
 	}
 
 	//Swapped x and y to match board representation
@@ -76,28 +86,16 @@ public class GameController : MonoBehaviour {
 				if(turn == PlayerTurn.O_TURN){
 					board[x][y] = 1;
 					oPieces--;
-					if(updateTurn){
-						turn = PlayerTurn.X_TURN;
-					}
 				} else if(turn == PlayerTurn.X_TURN){
 					board[x][y] = 2;
 					xPieces--;
-					if(updateTurn){
-						turn = PlayerTurn.O_TURN;
-					}
 				}
 			} else{ // It was removed
 				board[x][y] = 0;
 				if(turn == PlayerTurn.O_TURN){
 					oPieces++;
-					if(updateTurn){
-						turn = PlayerTurn.X_TURN;
-					}
 				} else if(turn == PlayerTurn.X_TURN){
 					xPieces++;
-					if(updateTurn){
-						turn = PlayerTurn.O_TURN;
-					}
 				}
 			}
 
@@ -113,6 +111,14 @@ public class GameController : MonoBehaviour {
 			Debug.Log("Board");
 			for(int i=0;i<BOARD_SIZE;i++){
 				Debug.Log(board[i][0]+" "+board[i][1]+" "+board[i][2]+" "+board[i][3]);
+			}
+
+			if(updateTurn){
+				if(turn == PlayerTurn.O_TURN){
+					turn = PlayerTurn.X_TURN;
+				} else if(turn == PlayerTurn.X_TURN){
+					turn = PlayerTurn.O_TURN;
+				}
 			}
 		}
 	}
@@ -256,12 +262,6 @@ public class GameController : MonoBehaviour {
 		}
 		//TODO: display winner and lock game out
 		//TODO: add highlighting of winning path
-	}
-
-	void OnMouseDown(){
-		if(turn == PlayerTurn.O_WINS || turn == PlayerTurn.X_WINS){
-			Application.LoadLevel("TitleScreen");
-		}
 	}
 
 	/*public void remove(){

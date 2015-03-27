@@ -17,7 +17,7 @@ public class OnePlayerButtonController : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		Debug.Log("Clicked One PLayer Start");
+		Debug.Log("Clicked One Player Start");
 		SceneProperties.aiPlaying = true;
 		Application.LoadLevel(onePlayerGameScene);
 	}
