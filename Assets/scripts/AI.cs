@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using AssemblyCSharp;
 
 public class AI : MonoBehaviour {
 
 	public int depth = 2;
 
-	public static Vector2 makeMove(int[][] board, int pieces, GameController gameController){
+	public static Vector2 makeMove(Board board, GameController gameController){
 		//minimax(board,depth,true);
-		HashSet<Vector2> set = getAvailableMoves(board,pieces,gameController);
+		HashSet<Vector2> set = getAvailableMoves(board,gameController);
 		int randNum = Random.Range(0,set.Count);
 		int i=0;
 		foreach(Vector2 vector in set){
@@ -22,14 +23,15 @@ public class AI : MonoBehaviour {
 	/*
 	 * Returns ArrayList of Vector2 of all available moves
 	 * */
-	static HashSet<Vector2> getAvailableMoves(int[][]board, int pieces, GameController gameController){
+	static HashSet<Vector2> getAvailableMoves(Board board, GameController gameController){
+
 		HashSet<Vector2> set = new HashSet<Vector2>();
-		for(int i=0; i<board.Length;i++){
-			for(int j=0; j<board[i].Length;j++){
-				if(pieces > 0 && board[i][j] == 0){
+		for(int i=0; i<board.positions.Length;i++){
+			for(int j=0; j<board.positions[i].Length;j++){
+				if(board.xPieces > 0 && board.positions[i][j] == 0){
 					set.Add(new Vector2(i,j));
 					//TODO make this not always 2
-				} else if(board[i][j] == 2) {
+				} else if(board.positions[i][j] == 2) {
 					ArrayList positions = gameController.getMovePositions(i,j);
 					//can remove
 					if(positions.Count == 0){
@@ -45,7 +47,8 @@ public class AI : MonoBehaviour {
 		return set;
 	}
 
-	static int minimax(int[][] board, int depth, bool maximize){
+	//TODO
+	static int minimax(Board board, int depth, bool maximize){
 		if(depth==0){
 			return hueristic(board);
 		}
@@ -57,7 +60,7 @@ public class AI : MonoBehaviour {
 		return -1;
 	}
 
-	static int hueristic(int[][]board){
+	static int hueristic(Board board){
 		return 0;
 	}
 	/*

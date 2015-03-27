@@ -79,11 +79,11 @@ public class BlockController : MonoBehaviour {
 			resetBlocks();
 			gameController.move(x,y, true);
 		} else if(state == BlockState.NUETRAL){
-			if(gameController.turn == GameController.PlayerTurn.X_TURN && gameController.xPieces > 0){
+			if(gameController.turn == GameController.PlayerTurn.X_TURN && gameController.board.xPieces > 0){
 				state = BlockState.X;
 				gameController.move(x,y, true);
 				resetBlocks();
-			} else if(gameController.turn == GameController.PlayerTurn.O_TURN && gameController.oPieces > 0){
+			} else if(gameController.turn == GameController.PlayerTurn.O_TURN && gameController.board.oPieces > 0){
 				state = BlockState.O;
 				gameController.move(x,y, true);
 				resetBlocks();

@@ -12,8 +12,41 @@ namespace AssemblyCSharp
 {
 	public class Board
 	{
-		public Board ()
+		/**
+		 * 0 is empty, 1 is O, 2 is x
+		 * */
+		public int[][]positions;
+		public int oPieces;
+		public int xPieces;
+
+		public Board (int boardSize, int piecesStart)
 		{
+			oPieces = piecesStart;
+			xPieces = piecesStart;
+
+			positions = new int[boardSize][];
+			for(int i=0; i<boardSize; i++){
+				int[] temp = new int[boardSize];
+				for(int j=0; j<boardSize; j++){
+					temp[j] = 0;
+				}
+				positions[i] = temp;
+			}
+		}
+
+		public Board(Board other){
+			oPieces = other.oPieces;
+			xPieces = other.xPieces;
+
+			int boardSize = other.positions.Length;
+			positions = new int[boardSize][];
+			for(int i=0; i<boardSize; i++){
+				int[] temp = new int[boardSize];
+				for(int j=0; j<boardSize; j++){
+					temp[j] = other.positions[i][j];
+				}
+				positions[i] = temp;
+			}
 		}
 	}
 }

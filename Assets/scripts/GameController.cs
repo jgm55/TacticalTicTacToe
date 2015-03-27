@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class GameController : MonoBehaviour {
 
@@ -8,15 +9,13 @@ public class GameController : MonoBehaviour {
 	public PlayerTurn turn = PlayerTurn.X_TURN;
 	public GUIStyle style;
 
-	public int oPieces = 5;
-	public int xPieces = 5;
-
 	public const int BOARD_SIZE = 4;
+	public const int NUM_PIECES = 5;
 
 	float doneCoooldown = 1;
 	float doneCounter = 0;
 
-	int [][] board;
+	public Board board;
 
 	//GUI Stuff
 	Vector2 resolution;
@@ -44,15 +43,7 @@ public class GameController : MonoBehaviour {
 		oPiecesLeftRect = new Rect(oPiecesLeftPos.x*resx,oPiecesLeftPos.y*resy,piecesLeftSize.x*resx,piecesLeftSize.y*resy);
 		winLabelRect = new Rect(resolution.x / 2 - winLabelSize.x,40*resy,winLabelSize.x * resx, winLabelSize.y*resy);
 
-		board = new int[BOARD_SIZE][];
-		for(int i=0; i<BOARD_SIZE; i++){
-			int[] temp = new int[BOARD_SIZE];
-			for(int j=0; j<BOARD_SIZE; j++){
-				temp[j] = 0;
-				//board[i][j] = 0;
-			}
-			board[i] = temp;
-		}
+		board = new Board(BOARD_SIZE, NUM_PIECES);
 	}
 	
 	// Update is called once per frame
@@ -60,7 +51,7 @@ public class GameController : MonoBehaviour {
 		if(SceneProperties.aiPlaying){
 			if(turn == PlayerTurn.X_TURN){
 				//TODO update this to not always be x
-				Vector2 move = AI.makeMove(board,xPieces,this);
+				Vector2 move = AI.makeMove(board,this);
 				BlockController[] blocks = FindObjectsOfType<BlockController>();
 				foreach (BlockController block in blocks){
 					if(block.x == move.x && block.y == move.y){
@@ -78,26 +69,34 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	/**
+	 * Returns the board after simulating the move on the given board
+	 * */
+	public Board simulateMove(Board givenBoard, int x, int y){
+		if(givenBoard.positions[x][y] == 0){
+			//1 for o, 2 for x
+			if(turn == PlayerTurn.O_TURN){
+				givenBoard.positions[x][y] = 1;
+				givenBoard.oPieces--;
+			} else if(turn == PlayerTurn.X_TURN){
+				givenBoard.positions[x][y] = 2;
+				givenBoard.xPieces--;
+			}
+		} else{ // It was removed
+			givenBoard.positions[x][y] = 0;
+			if(turn == PlayerTurn.O_TURN){
+				givenBoard.oPieces++;
+			} else if(turn == PlayerTurn.X_TURN){
+				givenBoard.xPieces++;
+			}
+		}
+		return givenBoard;
+	}
+
 	//Swapped x and y to match board representation
 	public void move(int y, int x, bool updateTurn){
 		if(turn != PlayerTurn.O_WINS && turn != PlayerTurn.X_WINS){
-			if(board[x][y] == 0){
-				//1 for o, 2 for x
-				if(turn == PlayerTurn.O_TURN){
-					board[x][y] = 1;
-					oPieces--;
-				} else if(turn == PlayerTurn.X_TURN){
-					board[x][y] = 2;
-					xPieces--;
-				}
-			} else{ // It was removed
-				board[x][y] = 0;
-				if(turn == PlayerTurn.O_TURN){
-					oPieces++;
-				} else if(turn == PlayerTurn.X_TURN){
-					xPieces++;
-				}
-			}
+			board = simulateMove(board, x, y);
 
 			int result = checkWin(x,y);
 			if(1 == result){
@@ -110,7 +109,8 @@ public class GameController : MonoBehaviour {
 
 			Debug.Log("Board");
 			for(int i=0;i<BOARD_SIZE;i++){
-				Debug.Log(board[i][0]+" "+board[i][1]+" "+board[i][2]+" "+board[i][3]);
+				Debug.Log(board.positions[i][0]+" "+board.positions[i][1]+" "
+				          +board.positions[i][2]+" "+board.positions[i][3]);
 			}
 
 			if(updateTurn){
@@ -128,7 +128,7 @@ public class GameController : MonoBehaviour {
 	 * Returns 1 for O winning, 2 for X winning, 0 otherwise;
 	 * */
 	private int checkWin(int x, int y){
-		int piece = board[x][y];
+		int piece = board.positions[x][y];
 		if( piece == 0){
 			return 0;
 		}
@@ -136,16 +136,16 @@ public class GameController : MonoBehaviour {
 		//check horizontal
 		bool same = true;
 		for(int i=0;i<BOARD_SIZE;i++){
-			same = (piece==board[i][y]) && same;
+			same = (piece==board.positions[i][y]) && same;
 		}
 		if (same) {
-			return board[x][y];
+			return board.positions[x][y];
 		}
 
 		//check Vertical
 		same = true;
 		for(int i=0;i<BOARD_SIZE;i++){
-			same = (piece==board[x][i]) && same;
+			same = (piece==board.positions[x][i]) && same;
 		}
 		if (same) {
 			return piece;
@@ -153,8 +153,8 @@ public class GameController : MonoBehaviour {
 
 		same = true;
 		//check for 4 corners
-		same = (piece == board[0][0] && piece == board[BOARD_SIZE-1][0] 
-		        && piece == board[0][BOARD_SIZE-1] && piece == board[BOARD_SIZE-1][BOARD_SIZE-1]);
+		same = (piece == board.positions[0][0] && piece == board.positions[BOARD_SIZE-1][0] 
+		        && piece == board.positions[0][BOARD_SIZE-1] && piece == board.positions[BOARD_SIZE-1][BOARD_SIZE-1]);
 		if (same) {
 			return piece;
 		}
@@ -162,26 +162,26 @@ public class GameController : MonoBehaviour {
 		if(x-1 >= 0){
 			//check up left square
 			if(y-1 >= 0){
-				if(piece == board[x-1][y] && piece == board[x-1][y-1] 
-				        && piece == board[x][y-1]){
+				if(piece == board.positions[x-1][y] && piece == board.positions[x-1][y-1] 
+				   && piece == board.positions[x][y-1]){
 					return piece;
 				}
 			} else if(y+1 < BOARD_SIZE){//check down left square
-				if(piece == board[x-1][y] && piece == board[x-1][y+1] 
-				   && piece == board[x][y+1]){
+				if(piece == board.positions[x-1][y] && piece == board.positions[x-1][y+1] 
+				   && piece == board.positions[x][y+1]){
 					return piece;
 				}
 			}
 		} else if(x+1 < BOARD_SIZE){
 			//check up right square
 			if(y-1 >= 0){
-				if(piece == board[x+1][y] && piece == board[x+1][y-1] 
-				   && piece == board[x][y-1]){
+				if(piece == board.positions[x+1][y] && piece == board.positions[x+1][y-1] 
+				   && piece == board.positions[x][y-1]){
 					return piece;
 				}
 			} else if(y+1 < BOARD_SIZE){//check down right square
-				if(piece == board[x+1][y] && piece == board[x+1][y+1] 
-				   && piece == board[x][y+1]){
+				if(piece == board.positions[x+1][y] && piece == board.positions[x+1][y+1] 
+				   && piece == board.positions[x][y+1]){
 					return piece;
 				}
 			}
@@ -197,12 +197,12 @@ public class GameController : MonoBehaviour {
 		ArrayList positions = new ArrayList();
 		if(x-1 >= 0){
 			if(y-1 >= 0){
-				if(board[x-1][y-1] == 0){
+				if(board.positions[x-1][y-1] == 0){
 					positions.Add(new Vector2(x-1, y-1));
 				}
 			}
 			if(y+1 < BOARD_SIZE){//check down left square
-				if(board[x-1][y+1] == 0){
+				if(board.positions[x-1][y+1] == 0){
 					positions.Add(new Vector2(x-1, y+1));
 				}
 			}
@@ -210,12 +210,12 @@ public class GameController : MonoBehaviour {
 		if(x+1 < BOARD_SIZE){
 			//check down right square
 			if(y-1 >= 0){
-				if(board[x+1][y-1] == 0){
+				if(board.positions[x+1][y-1] == 0){
 					positions.Add(new Vector2(x+1, y-1));
 				}
 			}
 			if(y+1 < BOARD_SIZE){//check up right square
-				if(board[x+1][y+1] == 0){
+				if(board.positions[x+1][y+1] == 0){
 					positions.Add(new Vector2(x+1, y+1));
 				}
 			}
@@ -245,11 +245,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	void OnGUI(){
-		//TODO: display moves left
 		style.fontSize = FONT_SIZE;
 
-		GUI.Label(xPiecesLeftRect, "X Pieces: " + xPieces.ToString(), style);
-		GUI.Label(oPiecesLeftRect, "O Pieces: " + oPieces.ToString(), style);
+		GUI.Label(xPiecesLeftRect, "X Pieces: " + board.xPieces.ToString(), style);
+		GUI.Label(oPiecesLeftRect, "O Pieces: " + board.oPieces.ToString(), style);
 		//TODO: display player turn
 		if(turn == PlayerTurn.O_WINS){
 			GUI.Label(winLabelRect, "O Wins!!!", style);
@@ -260,17 +259,6 @@ public class GameController : MonoBehaviour {
 		} else if(turn == PlayerTurn.X_TURN){
 			GUI.Label(winLabelRect, "X Turn...", style);
 		}
-		//TODO: display winner and lock game out
 		//TODO: add highlighting of winning path
 	}
-
-	/*public void remove(){
-		if(turn == PlayerTurn.X_TURN){
-			xPieces++;
-			turn = GameController.PlayerTurn.O_TURN;
-		} else if( turn == PlayerTurn.O_TURN){
-			oPieces++;
-			turn = GameController.PlayerTurn.X_TURN;
-		}
-	}*/
 }
