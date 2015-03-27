@@ -166,20 +166,23 @@ public class GameController : MonoBehaviour {
 				   && piece == board.positions[x][y-1]){
 					return piece;
 				}
-			} else if(y+1 < BOARD_SIZE){//check down left square
+			} 
+			if(y+1 < BOARD_SIZE){//check down left square
 				if(piece == board.positions[x-1][y] && piece == board.positions[x-1][y+1] 
 				   && piece == board.positions[x][y+1]){
 					return piece;
 				}
 			}
-		} else if(x+1 < BOARD_SIZE){
+		} 
+		if(x+1 < BOARD_SIZE){
 			//check up right square
 			if(y-1 >= 0){
 				if(piece == board.positions[x+1][y] && piece == board.positions[x+1][y-1] 
 				   && piece == board.positions[x][y-1]){
 					return piece;
 				}
-			} else if(y+1 < BOARD_SIZE){//check down right square
+			} 
+			if(y+1 < BOARD_SIZE){//check down right square
 				if(piece == board.positions[x+1][y] && piece == board.positions[x+1][y+1] 
 				   && piece == board.positions[x][y+1]){
 					return piece;
