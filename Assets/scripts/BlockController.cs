@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class BlockController : MonoBehaviour {
 
@@ -61,9 +62,9 @@ public class BlockController : MonoBehaviour {
 		GameController gameController = FindObjectOfType<GameController>();
 		//Check for placing
 		if(highlightState == BlockHighlightState.MOVE_TO){
-			if(gameController.turn == GameController.PlayerTurn.O_TURN){
+			if(gameController.board.turn == Board.PlayerTurn.O_TURN){
 				state = BlockState.O;
-			} else if(gameController.turn == GameController.PlayerTurn.X_TURN){
+			} else if(gameController.board.turn == Board.PlayerTurn.X_TURN){
 				state = BlockState.X;
 			}
 			BlockController[] blocks = GameObject.FindObjectsOfType<BlockController>();
@@ -79,18 +80,18 @@ public class BlockController : MonoBehaviour {
 			resetBlocks();
 			gameController.move(x,y, true);
 		} else if(state == BlockState.NUETRAL){
-			if(gameController.turn == GameController.PlayerTurn.X_TURN && gameController.board.xPieces > 0){
+			if(gameController.board.turn == Board.PlayerTurn.X_TURN && gameController.board.xPieces > 0){
 				state = BlockState.X;
 				gameController.move(x,y, true);
 				resetBlocks();
-			} else if(gameController.turn == GameController.PlayerTurn.O_TURN && gameController.board.oPieces > 0){
+			} else if(gameController.board.turn == Board.PlayerTurn.O_TURN && gameController.board.oPieces > 0){
 				state = BlockState.O;
 				gameController.move(x,y, true);
 				resetBlocks();
 			}
 		} else if(!gameController.canMove(x,y) && 
-		          ((state == BlockState.O && gameController.turn == GameController.PlayerTurn.O_TURN)
-		 ||(state == BlockState.X && gameController.turn == GameController.PlayerTurn.X_TURN))){ 
+		          ((state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN)
+		 ||(state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN))){ 
 			// Remove a piece
 			state = BlockState.NUETRAL;
 			gameController.move(x,y, true);
@@ -101,8 +102,8 @@ public class BlockController : MonoBehaviour {
 				block.highlightState = BlockHighlightState.NUETRAL;
 			}
 			highlightState = BlockHighlightState.NUETRAL;
-		} else if((state == BlockState.X && gameController.turn == GameController.PlayerTurn.X_TURN) 
-		          || (state == BlockState.O && gameController.turn == GameController.PlayerTurn.O_TURN ) ){
+		} else if((state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN) 
+		          || (state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN ) ){
 			//Select a piece
 			highlightState = BlockHighlightState.SELECTED;
 			foreach(BlockController block in gameController.getMoveBlocks(x,y)){

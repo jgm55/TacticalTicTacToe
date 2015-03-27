@@ -8,21 +8,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+
 namespace AssemblyCSharp
 {
 	public class Board
 	{
+
+		public enum PlayerTurn{X_TURN, O_TURN, NUETRAL, O_WINS, X_WINS};
+
 		/**
 		 * 0 is empty, 1 is O, 2 is x
 		 * */
 		public int[][]positions;
 		public int oPieces;
 		public int xPieces;
+		public PlayerTurn turn;
 
-		public Board (int boardSize, int piecesStart)
+		public Board (int boardSize, int piecesStart, PlayerTurn startTurn)
 		{
 			oPieces = piecesStart;
 			xPieces = piecesStart;
+
+			turn = startTurn;
 
 			positions = new int[boardSize][];
 			for(int i=0; i<boardSize; i++){
@@ -37,6 +44,8 @@ namespace AssemblyCSharp
 		public Board(Board other){
 			oPieces = other.oPieces;
 			xPieces = other.xPieces;
+
+			turn = other.turn;
 
 			int boardSize = other.positions.Length;
 			positions = new int[boardSize][];
