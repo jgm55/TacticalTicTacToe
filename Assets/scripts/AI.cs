@@ -5,11 +5,15 @@ using AssemblyCSharp;
 
 public class AI : MonoBehaviour {
 
-	public int depth = 2;
+	static public int depth = 2;
+	static public int WIN_HUERISTIC = 1000000;
+	static public int COMPUTER_NUMBER = 2;
+	static public int PLAYER_NUMBER = 1;
 
-	public static Move makeMove(Board board, GameController gameController){
-		//minimax(board,depth,true);
-		HashSet<Move> set = getAvailableMoves(board,gameController);
+
+	public static Move makeMove(Board board){
+		minimax(board,depth,int.MinValue, int.MaxValue, true);
+		HashSet<Move> set = getAvailableMoves(board);
 		int randNum = Random.Range(0,set.Count);
 		int i=0;
 		foreach(Move move in set){
@@ -24,7 +28,7 @@ public class AI : MonoBehaviour {
 	/*
 	 * Returns ArrayList of Move of all available moves
 	 * */
-	static HashSet<Move> getAvailableMoves(Board board, GameController gameController){
+	static HashSet<Move> getAvailableMoves(Board board){
 
 		HashSet<Move> set = new HashSet<Move>();
 		for(int i=0; i<board.positions.Length;i++){
@@ -47,17 +51,68 @@ public class AI : MonoBehaviour {
 		return set;
 	}
 
-	//TODO
-	static int minimax(Board board, int depth, bool maximize){
-		if(depth==0){
+	/**
+	 * Minimax with alpha beta pruning.
+	 * Returns hueristic
+	 * */
+	static int minimax(Board board, int depth,int alpha, int beta, bool maximize){
+		if(depth==0 ){//or terminal node (game over)
+			//BoardHelper.getInstance().checkWin(x,y,board)
 			return hueristic(board);
 		}
 		if(maximize){
-			int bestValue = int.MaxValue;
-		} else {
+			int bestValue = int.MinValue;
+			foreach(Move move in getAvailableMoves(board)){
+				Vector2[] clicks =  move.getClicks();
+				BoardHelper helper = BoardHelper.getInstance();
+				Board tempBoard = new Board(board);
+				if(clicks.Length == 2){
+					tempBoard = helper.simulateMove(tempBoard,clicks[0]);
+					if(helper.checkWin(clicks[0],tempBoard) == COMPUTER_NUMBER){
+						return WIN_HUERISTIC;	
+					}
+					tempBoard = helper.simulateMove(tempBoard,clicks[1]);
+				} else {
+					tempBoard = helper.simulateMove(tempBoard,clicks[0]);
+				}
+				//update turn
+				tempBoard.updateTurn();
 
+				int val = minimax(tempBoard,depth-1,alpha,beta,!maximize);
+				bestValue = Mathf.Max(bestValue,val);
+				alpha = Mathf.Max(alpha,val);
+				if(beta <= alpha){
+					break;
+				}
+			}
+			return bestValue;
+		} else {
+			int bestValue = int.MaxValue;
+			foreach(Move move in getAvailableMoves(board)){
+				Vector2[] clicks =  move.getClicks();
+				BoardHelper helper = BoardHelper.getInstance();
+				Board tempBoard = new Board(board);
+				if(clicks.Length == 2){
+					tempBoard = helper.simulateMove(tempBoard,clicks[0]);
+					if(helper.checkWin(clicks[0],tempBoard) == PLAYER_NUMBER){
+						return -1*WIN_HUERISTIC;	
+					}
+					tempBoard = helper.simulateMove(tempBoard,clicks[1]);
+				} else {
+					tempBoard = helper.simulateMove(tempBoard,clicks[0]);
+				}
+				//update turn
+				tempBoard.updateTurn();
+				
+				int val = minimax(tempBoard,depth-1,alpha,beta,!maximize);
+				bestValue = Mathf.Min(bestValue,val);
+				beta = Mathf.Min(beta,val);
+				if(beta <= alpha){
+					break;
+				}
+			}
+			return bestValue;
 		}
-		return -1;
 	}
 
 	static int hueristic(Board board){

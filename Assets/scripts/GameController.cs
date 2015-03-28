@@ -49,7 +49,7 @@ public class GameController : MonoBehaviour {
 		if(SceneProperties.aiPlaying){
 			if(board.turn == Board.PlayerTurn.X_TURN && !moving){
 				//TODO update this to not always be x
-				Move move = AI.makeMove(board,this);
+				Move move = AI.makeMove(board);
 				Vector2[] clicks = move.getClicks();
 				clickBlock(clicks[0]);
 				if(clicks.Length == 2) {
@@ -109,11 +109,7 @@ public class GameController : MonoBehaviour {
 			}
 
 			if(updateTurn){
-				if(board.turn == Board.PlayerTurn.O_TURN){
-					board.turn = Board.PlayerTurn.X_TURN;
-				} else if(board.turn == Board.PlayerTurn.X_TURN){
-					board.turn = Board.PlayerTurn.O_TURN;
-				}
+				board.updateTurn();
 			}
 		}
 	}

@@ -35,6 +35,13 @@ namespace AssemblyCSharp
 	 	* Checks if the updated x/y coord leads to a win.
 	 	* Returns 1 for O winning, 2 for X winning, 0 otherwise;
 	 	* */
+		public int checkWin(Vector2 click, Board givenBoard){
+			return checkWin((int)click.x,(int)click.y,givenBoard);
+		}
+		/**
+	 	* Checks if the updated x/y coord leads to a win.
+	 	* Returns 1 for O winning, 2 for X winning, 0 otherwise;
+	 	* */
 		public int checkWin(int x, int y, Board givenBoard){
 			int piece = givenBoard.positions[x][y];
 			if( piece == 0){
@@ -148,6 +155,13 @@ namespace AssemblyCSharp
 			return positions;
 		}
 
+
+		/**
+	 	* Returns the board after simulating the move on the given board
+	 	* */
+		public Board simulateMove(Board givenBoard, Vector2 position){
+			return simulateMove(givenBoard,(int)position.x, (int)position.y);
+		}
 		/**
 	 	* Returns the board after simulating the move on the given board
 	 	* */

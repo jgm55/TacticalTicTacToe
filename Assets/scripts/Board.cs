@@ -57,6 +57,14 @@ namespace AssemblyCSharp
 				positions[i] = temp;
 			}
 		}
+
+		public void updateTurn(){
+			if(turn == PlayerTurn.O_TURN){
+				turn = PlayerTurn.X_TURN;
+			} else if(turn == PlayerTurn.X_TURN){
+				turn = PlayerTurn.O_TURN;
+			}
+		}
 	}
 }
 
