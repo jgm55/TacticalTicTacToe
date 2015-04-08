@@ -45,7 +45,7 @@ public class StartGameController : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		Debug.Log("Clicked start");
+//		Debug.Log("Clicked start");
 		twoPlayerButton.SetActive(true);
 		onePlayerButton.SetActive(true);
 		tutorialButton.SetActive(false);

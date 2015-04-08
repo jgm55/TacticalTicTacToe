@@ -4,4 +4,5 @@ using System.Collections;
 public class SceneProperties : MonoBehaviour {
 
 	public static bool aiPlaying = false;
+    public static bool heldPiece = false;
 }

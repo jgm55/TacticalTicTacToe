@@ -36,6 +36,7 @@ namespace AssemblyCSharp
 	 	* Returns 1 for O winning, 2 for X winning, 0 otherwise;
 	 	* */
 		public int checkWin(Vector2 click, Board givenBoard){
+			//Debug.Log("checkWin: "+click);
 			return checkWin((int)click.x,(int)click.y,givenBoard);
 		}
 		/**
@@ -118,7 +119,7 @@ namespace AssemblyCSharp
 					}
 				}
 			}
-			
+
 			return 0;
 		}
 		/**

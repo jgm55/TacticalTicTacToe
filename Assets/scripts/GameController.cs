@@ -27,7 +27,12 @@ public class GameController : MonoBehaviour {
 	Vector2 winLabelSize = new Vector2(180,30);
 	Vector2 xPiecesLeftPos;
 	Vector2 oPiecesLeftPos;
-	const int FONT_SIZE = 24;
+	const int FONT_SIZE = 40;
+
+	void Awake(){
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
+	}
+
 	// Use this for initialization
 	void Start () {
 
@@ -50,6 +55,12 @@ public class GameController : MonoBehaviour {
 			if(board.turn == Board.PlayerTurn.X_TURN && !moving){
 				//TODO update this to not always be x
 				Move move = AI.makeMove(board);
+                Debug.Log("Board");
+			    /*for(int i=0;i<BOARD_SIZE;i++){
+				    Debug.Log(board.positions[i][0]+" "+board.positions[i][1]+" "
+				              +board.positions[i][2]+" "+board.positions[i][3]);
+			    }//*/
+                //Debug.Log(move);
 				Vector2[] clicks = move.getClicks();
 				clickBlock(clicks[0]);
 				if(clicks.Length == 2) {
@@ -102,11 +113,11 @@ public class GameController : MonoBehaviour {
 				board.turn = Board.PlayerTurn.X_WINS;
 			}
 
-			Debug.Log("Board");
+/*			Debug.Log("Board");
 			for(int i=0;i<BOARD_SIZE;i++){
 				Debug.Log(board.positions[i][0]+" "+board.positions[i][1]+" "
 				          +board.positions[i][2]+" "+board.positions[i][3]);
-			}
+			}*/
 
 			if(updateTurn){
 				board.updateTurn();

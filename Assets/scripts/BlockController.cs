@@ -9,6 +9,8 @@ public class BlockController : MonoBehaviour {
 	public GameObject spotlightPrefab;
 	GameObject instantiatedSpotlight;
 
+    bool allowedToClick = false;
+
 	//NOTE: Must Set these when instantiate object
 	public int x, y;
 	public enum BlockState {NUETRAL,O,X};
@@ -58,58 +60,84 @@ public class BlockController : MonoBehaviour {
 		}
 	}
 
-	void OnMouseDown(){
-		GameController gameController = FindObjectOfType<GameController>();
-		//Check for placing
-		if(highlightState == BlockHighlightState.MOVE_TO){
-			if(gameController.board.turn == Board.PlayerTurn.O_TURN){
-				state = BlockState.O;
-			} else if(gameController.board.turn == Board.PlayerTurn.X_TURN){
-				state = BlockState.X;
-			}
-			BlockController[] blocks = GameObject.FindObjectsOfType<BlockController>();
-			foreach(BlockController block in blocks){
-				if(block.highlightState == BlockHighlightState.SELECTED){
-					//found the move from. Remove it.
-					block.state = BlockState.NUETRAL;
-					//remove it
-					gameController.move(block.x,block.y, false);
-				}
-				//block.highlightState = BlockHighlightState.NUETRAL;
-			}
-			resetBlocks();
-			gameController.move(x,y, true);
-		} else if(state == BlockState.NUETRAL){
-			if(gameController.board.turn == Board.PlayerTurn.X_TURN && gameController.board.xPieces > 0){
-				state = BlockState.X;
-				gameController.move(x,y, true);
-				resetBlocks();
-			} else if(gameController.board.turn == Board.PlayerTurn.O_TURN && gameController.board.oPieces > 0){
-				state = BlockState.O;
-				gameController.move(x,y, true);
-				resetBlocks();
-			}
-		} else if(!gameController.canMove(x,y) && 
-		          ((state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN)
-		 ||(state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN))){ 
-			// Remove a piece
-			state = BlockState.NUETRAL;
-			gameController.move(x,y, true);
-			resetBlocks();
-		} else if(highlightState == BlockHighlightState.SELECTED){
-			//De-select a piece
-			foreach(BlockController block in gameController.getMoveBlocks(x,y)){
-				block.highlightState = BlockHighlightState.NUETRAL;
-			}
-			highlightState = BlockHighlightState.NUETRAL;
-		} else if((state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN) 
-		          || (state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN ) ){
-			//Select a piece
-			highlightState = BlockHighlightState.SELECTED;
-			foreach(BlockController block in gameController.getMoveBlocks(x,y)){
-				block.highlightState = BlockHighlightState.MOVE_TO;
-			}
-		}
+	void OnMouseUp(){
+        if (SceneProperties.heldPiece)
+        {
+            GameController gameController = FindObjectOfType<GameController>();
+            if (!SceneProperties.aiPlaying || (SceneProperties.aiPlaying && gameController.board.turn != Board.PlayerTurn.X_TURN || allowedToClick))
+            {
+                //Check for placing
+                if (highlightState == BlockHighlightState.MOVE_TO)
+                {
+                    if (gameController.board.turn == Board.PlayerTurn.O_TURN)
+                    {
+                        state = BlockState.O;
+                    }
+                    else if (gameController.board.turn == Board.PlayerTurn.X_TURN)
+                    {
+                        state = BlockState.X;
+                    }
+                    BlockController[] blocks = GameObject.FindObjectsOfType<BlockController>();
+                    foreach (BlockController block in blocks)
+                    {
+                        if (block.highlightState == BlockHighlightState.SELECTED)
+                        {
+                            //found the move from. Remove it.
+                            block.state = BlockState.NUETRAL;
+                            //remove it
+                            gameController.move(block.x, block.y, false);
+                        }
+                        //block.highlightState = BlockHighlightState.NUETRAL;
+                    }
+                    resetBlocks();
+                    gameController.move(x, y, true);
+                }
+                else if (state == BlockState.NUETRAL)
+                {
+                    if (gameController.board.turn == Board.PlayerTurn.X_TURN && gameController.board.xPieces > 0)
+                    {
+                        state = BlockState.X;
+                        gameController.move(x, y, true);
+                        resetBlocks();
+                    }
+                    else if (gameController.board.turn == Board.PlayerTurn.O_TURN && gameController.board.oPieces > 0)
+                    {
+                        state = BlockState.O;
+                        gameController.move(x, y, true);
+                        resetBlocks();
+                    }
+                }
+                else if (!gameController.canMove(x, y) &&
+                        ((state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN)
+               || (state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN)))
+                {
+                    // Remove a piece
+                    state = BlockState.NUETRAL;
+                    gameController.move(x, y, true);
+                    resetBlocks();
+                }
+                else if (highlightState == BlockHighlightState.SELECTED)
+                {
+                    //De-select a piece
+                    foreach (BlockController block in gameController.getMoveBlocks(x, y))
+                    {
+                        block.highlightState = BlockHighlightState.NUETRAL;
+                    }
+                    highlightState = BlockHighlightState.NUETRAL;
+                }
+                else if ((state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN)
+                        || (state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN))
+                {
+                    //Select a piece
+                    highlightState = BlockHighlightState.SELECTED;
+                    foreach (BlockController block in gameController.getMoveBlocks(x, y))
+                    {
+                        block.highlightState = BlockHighlightState.MOVE_TO;
+                    }
+                }
+            }
+            allowedToClick = false;
+        }
 	}
 
 	private void resetBlocks(){
@@ -120,6 +148,7 @@ public class BlockController : MonoBehaviour {
 	}
 
 	public void simulateClick(){
-		OnMouseDown();
+        allowedToClick = true;
+		OnMouseUp();
 	}
 }

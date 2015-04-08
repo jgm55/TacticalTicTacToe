@@ -5,20 +5,36 @@ using AssemblyCSharp;
 
 public class AI : MonoBehaviour {
 
-	static public int depth = 2;
-	static public int WIN_HUERISTIC = 1000000;
+	struct ScoreMove{
+		public int score;
+		public Move move;
+		public ScoreMove(int score1, Move move1){
+			score = score1;
+			move = move1;
+		}
+	}
+
+	static public int MAX_DEPTH = 3;
+	static public int WIN_HUERISTIC = 10000;
 	static public int COMPUTER_NUMBER = 2;
 	static public int PLAYER_NUMBER = 1;
 
 
 	public static Move makeMove(Board board){
-		minimax(board,depth,int.MinValue, int.MaxValue, true);
+		ScoreMove val = minimax(board,MAX_DEPTH,int.MinValue, int.MaxValue, true);
+		Debug.Log(val.score);
+		if(val.move!= null){
+			return val.move;
+		}
+
+		Debug.Log("Returning random Move");
+
 		HashSet<Move> set = getAvailableMoves(board);
 		int randNum = Random.Range(0,set.Count);
 		int i=0;
 		foreach(Move move in set){
 			if(i==randNum){
-				Debug.Log("Move from AI"+move.ToString());
+//				Debug.Log("Move from AI"+move.ToString());
 				return move;
 			}
 			i++;
@@ -33,9 +49,12 @@ public class AI : MonoBehaviour {
 		HashSet<Move> set = new HashSet<Move>();
 		for(int i=0; i<board.positions.Length;i++){
 			for(int j=0; j<board.positions[i].Length;j++){
-				if(board.xPieces > 0 && board.positions[i][j] == 0){
-					set.Add(new Move(i,j));
-				} else if(board.positions[i][j] == 2) {//TODO make this not always 2
+                if ((board.xPieces > 0 && board.turn == Board.PlayerTurn.X_TURN) || (board.oPieces > 0 && board.turn == Board.PlayerTurn.O_TURN))
+                {//Check if enough pieces
+                    if(board.positions[i][j] == 0){//Then check if space is free
+					    set.Add(new Move(i,j));
+                    }
+				} else if(board.positions[i][j] == getPieceNumber(board.turn)) {
 					ArrayList positions = BoardHelper.getInstance().getMovePositions(board,i,j);
 					//can remove
 					if(positions.Count == 0){
@@ -51,64 +70,98 @@ public class AI : MonoBehaviour {
 		return set;
 	}
 
+    private static int getPieceNumber(Board.PlayerTurn playerTurn)
+    {
+        if (playerTurn == Board.PlayerTurn.X_TURN)
+        {
+            return 2;
+        }
+        else if (playerTurn == Board.PlayerTurn.O_TURN)
+        {
+            return 1;
+        }
+        return 0;
+
+    }
+
 	/**
 	 * Minimax with alpha beta pruning.
 	 * Returns hueristic
 	 * */
-	static int minimax(Board board, int depth,int alpha, int beta, bool maximize){
+	static ScoreMove minimax(Board board, int depth,int alpha, int beta, bool maximize){
 		if(depth==0 ){//or terminal node (game over)
 			//BoardHelper.getInstance().checkWin(x,y,board)
-			return hueristic(board);
+			return new ScoreMove(hueristic(board),null);
 		}
+        //update turn
+        if (depth != MAX_DEPTH)
+        {
+            board.updateTurn();
+        }
 		if(maximize){
-			int bestValue = int.MinValue;
+			ScoreMove bestValue = new ScoreMove(int.MinValue, null);
 			foreach(Move move in getAvailableMoves(board)){
 				Vector2[] clicks =  move.getClicks();
 				BoardHelper helper = BoardHelper.getInstance();
 				Board tempBoard = new Board(board);
+                Vector2 lastMove;
+
 				if(clicks.Length == 2){
 					tempBoard = helper.simulateMove(tempBoard,clicks[0]);
-					if(helper.checkWin(clicks[0],tempBoard) == COMPUTER_NUMBER){
-						return WIN_HUERISTIC;	
-					}
 					tempBoard = helper.simulateMove(tempBoard,clicks[1]);
-				} else {
+                    lastMove = clicks[1];
+				} else {//it is length 1
 					tempBoard = helper.simulateMove(tempBoard,clicks[0]);
+                    lastMove = clicks[0];
 				}
-				//update turn
-				tempBoard.updateTurn();
+                if (helper.checkWin(lastMove, tempBoard) == COMPUTER_NUMBER)
+                {
+                    Debug.Log("Max: " + move);
+                    return new ScoreMove(WIN_HUERISTIC, move);
+                }
 
-				int val = minimax(tempBoard,depth-1,alpha,beta,!maximize);
-				bestValue = Mathf.Max(bestValue,val);
-				alpha = Mathf.Max(alpha,val);
+				ScoreMove val = minimax(tempBoard,depth-1,alpha,beta,!maximize);
+				if(bestValue.score < val.score ){
+					bestValue = val;
+                    bestValue.move = move;
+				}
+				alpha = Mathf.Max(alpha,val.score);
 				if(beta <= alpha){
-					break;
+//					break;
 				}
 			}
 			return bestValue;
 		} else {
-			int bestValue = int.MaxValue;
+			ScoreMove bestValue = new ScoreMove(int.MaxValue,null);
 			foreach(Move move in getAvailableMoves(board)){
 				Vector2[] clicks =  move.getClicks();
 				BoardHelper helper = BoardHelper.getInstance();
 				Board tempBoard = new Board(board);
+                Vector2 lastMove;
 				if(clicks.Length == 2){
 					tempBoard = helper.simulateMove(tempBoard,clicks[0]);
-					if(helper.checkWin(clicks[0],tempBoard) == PLAYER_NUMBER){
-						return -1*WIN_HUERISTIC;	
-					}
 					tempBoard = helper.simulateMove(tempBoard,clicks[1]);
+                    lastMove = clicks[1];
 				} else {
 					tempBoard = helper.simulateMove(tempBoard,clicks[0]);
+                    lastMove = clicks[0];
 				}
+                if (helper.checkWin(lastMove, tempBoard) == PLAYER_NUMBER)
+                {
+                    Debug.Log("Min: " + move);
+                    return new ScoreMove(-1 * WIN_HUERISTIC, move);
+                }
 				//update turn
-				tempBoard.updateTurn();
-				
-				int val = minimax(tempBoard,depth-1,alpha,beta,!maximize);
-				bestValue = Mathf.Min(bestValue,val);
-				beta = Mathf.Min(beta,val);
+				//tempBoard.updateTurn();
+				ScoreMove val = minimax(tempBoard,depth-1,alpha,beta,!maximize);
+				if(bestValue.score > val.score){
+					bestValue = val;
+                    bestValue.move = move;
+
+				}
+				beta = Mathf.Min(beta,val.score);
 				if(beta <= alpha){
-					break;
+		//			break;
 				}
 			}
 			return bestValue;
@@ -116,7 +169,41 @@ public class AI : MonoBehaviour {
 	}
 
 	static int hueristic(Board board){
-		return 0;
+        float h = 0;
+        int pieceNumber = getPieceNumber(board.turn);
+        if (pieceNumber == board.positions[1][1])
+        {
+            h += board.positions[1][1];
+        }
+        if (pieceNumber == board.positions[1][2])
+        {
+            h += board.positions[1][2];
+        }
+        if (pieceNumber == board.positions[2][1])
+        {
+            h += board.positions[2][1];
+        }
+        if (pieceNumber == board.positions[2][2])
+        {
+            h += board.positions[2][2];
+        }
+        h = Mathf.Pow(h / pieceNumber, 2);
+        if (board.turn == Board.PlayerTurn.O_TURN) {
+            h = h + 100 * (board.oPieces - board.xPieces);
+            h = -1*h;
+        }
+        else
+        {
+            h = h + 100 * (board.xPieces - board.oPieces);
+        }
+        return (int)h;
+        /*for (int i = 0; i < board.positions.Length; i++)
+        {
+            for (int j = 0; j < board.positions[i].Length; j++)
+            {
+
+            }
+        }*/
 	}
 	/*
 	 *  if depth = 0 or node is a terminal node

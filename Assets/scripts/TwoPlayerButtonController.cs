@@ -17,7 +17,7 @@ public class TwoPlayerButtonController : MonoBehaviour {
 
 	void OnMouseDown(){
 		Debug.Log("Clicked 2 player start");
-
+		SceneProperties.aiPlaying = false;
 		Application.LoadLevel(twoPlayerGameScene);
 	}
 }
