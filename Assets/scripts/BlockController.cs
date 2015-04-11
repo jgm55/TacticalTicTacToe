@@ -28,7 +28,7 @@ public class BlockController : MonoBehaviour {
 	void Update () {
 		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-		if(state == BlockState.X){
+		/*if(state == BlockState.X){
 			spriteRenderer.sprite = XPiece;
 		} else if(state == BlockState.O){
 			spriteRenderer.sprite = OPiece;
@@ -36,7 +36,7 @@ public class BlockController : MonoBehaviour {
 			spriteRenderer.sprite = basePiece;
 		} else {
 			Debug.Log("AHH BAD - STATE SET WRONG ON BLOCK");
-		}
+		}*/
 
 		Vector3 position = new Vector3(transform.position.x,transform.position.y, transform.position.z+spotlightPrefab.transform.position.z);
 
@@ -60,10 +60,20 @@ public class BlockController : MonoBehaviour {
 		}
 	}
 
-	void OnMouseUp(){
+	public bool clickSquare(BlockState pieceState){
+        GameController gameController = FindObjectOfType<GameController>();
+        if (gameController.board.turn == Board.PlayerTurn.O_TURN && pieceState != BlockState.O)
+        {
+            return false;
+        } 
+        if (gameController.board.turn == Board.PlayerTurn.X_TURN && pieceState != BlockState.X)
+        {
+            return false;
+        }
+
+
         if (SceneProperties.heldPiece)
         {
-            GameController gameController = FindObjectOfType<GameController>();
             if (!SceneProperties.aiPlaying || (SceneProperties.aiPlaying && gameController.board.turn != Board.PlayerTurn.X_TURN || allowedToClick))
             {
                 //Check for placing
@@ -91,6 +101,7 @@ public class BlockController : MonoBehaviour {
                     }
                     resetBlocks();
                     gameController.move(x, y, true);
+                    return true;
                 }
                 else if (state == BlockState.NUETRAL)
                 {
@@ -99,12 +110,14 @@ public class BlockController : MonoBehaviour {
                         state = BlockState.X;
                         gameController.move(x, y, true);
                         resetBlocks();
+                        return true;
                     }
                     else if (gameController.board.turn == Board.PlayerTurn.O_TURN && gameController.board.oPieces > 0)
                     {
                         state = BlockState.O;
                         gameController.move(x, y, true);
                         resetBlocks();
+                        return true;
                     }
                 }
                 else if (!gameController.canMove(x, y) &&
@@ -115,6 +128,7 @@ public class BlockController : MonoBehaviour {
                     state = BlockState.NUETRAL;
                     gameController.move(x, y, true);
                     resetBlocks();
+                    return true;
                 }
                 else if (highlightState == BlockHighlightState.SELECTED)
                 {
@@ -124,6 +138,7 @@ public class BlockController : MonoBehaviour {
                         block.highlightState = BlockHighlightState.NUETRAL;
                     }
                     highlightState = BlockHighlightState.NUETRAL;
+                    return true;
                 }
                 else if ((state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN)
                         || (state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN))
@@ -134,11 +149,18 @@ public class BlockController : MonoBehaviour {
                     {
                         block.highlightState = BlockHighlightState.MOVE_TO;
                     }
+                    return true;
                 }
             }
             allowedToClick = false;
         }
+        return false;
 	}
+
+    public bool canMove()
+    {
+        return FindObjectOfType<GameController>().canMove(x, y);
+    }
 
 	private void resetBlocks(){
 		BlockController[] blocks = GameObject.FindObjectsOfType<BlockController>();
@@ -149,6 +171,6 @@ public class BlockController : MonoBehaviour {
 
 	public void simulateClick(){
         allowedToClick = true;
-		OnMouseUp();
+		clickSquare(BlockState.X);
 	}
 }
