@@ -15,9 +15,11 @@ public class BlockController : MonoBehaviour {
 	public int x, y;
 	public enum BlockState {NUETRAL,O,X};
 	public enum BlockHighlightState {SELECTED, MOVE_TO, NUETRAL};
+    public enum Action { NONE, MOVED, PICKED_UP, PLACED, SELECTED,DE_SELECTED};
 
-	BlockState state = BlockState.NUETRAL;
-	BlockHighlightState highlightState = BlockHighlightState.NUETRAL;
+    public BlockState state = BlockState.NUETRAL;
+
+	public BlockHighlightState highlightState = BlockHighlightState.NUETRAL;
 
 	// Use this for initialization
 	void Start () {
@@ -28,15 +30,18 @@ public class BlockController : MonoBehaviour {
 	void Update () {
 		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-		/*if(state == BlockState.X){
-			spriteRenderer.sprite = XPiece;
-		} else if(state == BlockState.O){
-			spriteRenderer.sprite = OPiece;
-		} else if(state == BlockState.NUETRAL){
-			spriteRenderer.sprite = basePiece;
-		} else {
-			Debug.Log("AHH BAD - STATE SET WRONG ON BLOCK");
-		}*/
+        if (state == BlockState.O)
+        {
+            spriteRenderer.sprite = OPiece;
+        }
+        else if (state == BlockState.X)
+        {
+            spriteRenderer.sprite = XPiece;
+        }
+        else
+        {
+            spriteRenderer.sprite = basePiece;
+        }
 
 		Vector3 position = new Vector3(transform.position.x,transform.position.y, transform.position.z+spotlightPrefab.transform.position.z);
 
@@ -60,19 +65,51 @@ public class BlockController : MonoBehaviour {
 		}
 	}
 
-	public bool clickSquare(BlockState pieceState){
+    public Action highlightSquare(BlockState pieceState)
+    {
+        GameController gameController = FindObjectOfType<GameController>();
+        Action returnAction = Action.NONE;
+        if (gameController.board.turn == Board.PlayerTurn.O_TURN && pieceState != BlockState.O)
+        {
+            return Action.NONE;
+        }
+        if (gameController.board.turn == Board.PlayerTurn.X_TURN && pieceState != BlockState.X)
+        {
+            return Action.NONE;
+        }
+        if (highlightState == BlockHighlightState.SELECTED)
+        {
+            //De-select a piece
+            resetBlocks();
+            returnAction = Action.DE_SELECTED;
+        }
+        else if ((state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN)
+                || (state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN))
+        {
+            //Select a piece
+            resetBlocks();
+            highlightState = BlockHighlightState.SELECTED;
+            foreach (BlockController block in gameController.getMoveBlocks(x, y))
+            {
+                block.highlightState = BlockHighlightState.MOVE_TO;
+            }
+            returnAction = Action.SELECTED;
+        }
+        return returnAction;
+    }
+
+	public Action clickSquare(BlockState pieceState){
         GameController gameController = FindObjectOfType<GameController>();
         if (gameController.board.turn == Board.PlayerTurn.O_TURN && pieceState != BlockState.O)
         {
-            return false;
+            return Action.NONE;
         } 
         if (gameController.board.turn == Board.PlayerTurn.X_TURN && pieceState != BlockState.X)
         {
-            return false;
+            return Action.NONE;
         }
-
-
-        if (SceneProperties.heldPiece)
+        Action returnAction = Action.NONE;
+        if (true)
         {
             if (!SceneProperties.aiPlaying || (SceneProperties.aiPlaying && gameController.board.turn != Board.PlayerTurn.X_TURN || allowedToClick))
             {
@@ -101,7 +138,7 @@ public class BlockController : MonoBehaviour {
                     }
                     resetBlocks();
                     gameController.move(x, y, true);
-                    return true;
+                    returnAction = Action.MOVED;
                 }
                 else if (state == BlockState.NUETRAL)
                 {
@@ -110,15 +147,14 @@ public class BlockController : MonoBehaviour {
                         state = BlockState.X;
                         gameController.move(x, y, true);
                         resetBlocks();
-                        return true;
                     }
                     else if (gameController.board.turn == Board.PlayerTurn.O_TURN && gameController.board.oPieces > 0)
                     {
                         state = BlockState.O;
                         gameController.move(x, y, true);
                         resetBlocks();
-                        return true;
                     }
+                    returnAction = Action.PLACED;
                 }
                 else if (!gameController.canMove(x, y) &&
                         ((state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN)
@@ -128,39 +164,13 @@ public class BlockController : MonoBehaviour {
                     state = BlockState.NUETRAL;
                     gameController.move(x, y, true);
                     resetBlocks();
-                    return true;
-                }
-                else if (highlightState == BlockHighlightState.SELECTED)
-                {
-                    //De-select a piece
-                    foreach (BlockController block in gameController.getMoveBlocks(x, y))
-                    {
-                        block.highlightState = BlockHighlightState.NUETRAL;
-                    }
-                    highlightState = BlockHighlightState.NUETRAL;
-                    return true;
-                }
-                else if ((state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN)
-                        || (state == BlockState.O && gameController.board.turn == Board.PlayerTurn.O_TURN))
-                {
-                    //Select a piece
-                    highlightState = BlockHighlightState.SELECTED;
-                    foreach (BlockController block in gameController.getMoveBlocks(x, y))
-                    {
-                        block.highlightState = BlockHighlightState.MOVE_TO;
-                    }
-                    return true;
+                    returnAction = Action.PICKED_UP;
                 }
             }
             allowedToClick = false;
         }
-        return false;
+        return returnAction;
 	}
-
-    public bool canMove()
-    {
-        return FindObjectOfType<GameController>().canMove(x, y);
-    }
 
 	private void resetBlocks(){
 		BlockController[] blocks = GameObject.FindObjectsOfType<BlockController>();
@@ -169,6 +179,9 @@ public class BlockController : MonoBehaviour {
 		}
 	}
 
+    /**
+     * Call by the AI system ONLY, please
+     * */
 	public void simulateClick(){
         allowedToClick = true;
 		clickSquare(BlockState.X);

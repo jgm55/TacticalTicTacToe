@@ -146,6 +146,13 @@ public class GameController : MonoBehaviour {
 		return BoardHelper.getInstance().getMovePositions(board, x,y).Count != 0;
 	}
 
+    public void resetBlocks(){
+		BlockController[] blocks = GameObject.FindObjectsOfType<BlockController>();
+		foreach(BlockController block in blocks){
+			block.highlightState = BlockController.BlockHighlightState.NUETRAL;
+		}
+	}
+
 	void OnGUI(){
 		style.fontSize = FONT_SIZE;
 

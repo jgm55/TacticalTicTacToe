@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
+
 
 public class PieceController : MonoBehaviour {
 
@@ -12,6 +14,7 @@ public class PieceController : MonoBehaviour {
     Vector3 startPos;
     Vector3 placePos = Vector3.zero;
     Vector3 returnPlace;
+    BlockController fromBlock = null;
 
     float count = 0f;
     float duration = .5f;
@@ -20,6 +23,7 @@ public class PieceController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         startPos = this.transform.position;
+        returnPlace = startPos;
 	}
 	
 	// Update is called once per frame
@@ -29,7 +33,14 @@ public class PieceController : MonoBehaviour {
             this.transform.position += Time.deltaTime* moveDist;
             if (count >= duration)
             {
-                state = PieceState.RETURNING;
+                if (fromBlock == null)
+                {
+                    state = PieceState.START;
+                }
+                else
+                {
+                    state = PieceState.PLACED;
+                }
                 count = 0f;
                 transform.position = returnPlace;
             }
@@ -45,38 +56,56 @@ public class PieceController : MonoBehaviour {
 
     void OnMouseDown()
     {
-        SceneProperties.heldPiece = true;
-        state = PieceState.HELD;
+        Board.PlayerTurn turn = FindObjectOfType<GameController>().board.turn;
+        if ((blockType == BlockController.BlockState.X && turn == Board.PlayerTurn.X_TURN) || 
+            (blockType == BlockController.BlockState.O && turn == Board.PlayerTurn.O_TURN))
+        {
+            SceneProperties.heldPiece = true;
+            state = PieceState.HELD;
+            if(state == PieceState.PLACED){
+                /*RaycastHit2D[] hits = getRayCastFromScreen();
+                foreach (RaycastHit2D hit in hits)
+                {
+                    if (hit.collider.gameObject != this.gameObject)
+                    {
+                        BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
+                        if (block != null)
+                        {
+                            //block.clickSquare(blockType);
+                            block.highlightSquare(blockType);
+                        }
+                    }
+                }*/
+                fromBlock.highlightSquare(blockType);
+            }
+            Debug.Log("ON MOUSE DOWN: " + state);
+        }
+    }
+
+    RaycastHit2D[] getRayCastFromScreen()
+    {
+        Vector2 camPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return Physics2D.RaycastAll(camPos, Vector2.zero);
     }
 
     void OnMouseUp()
     {
-        //find if block is hit:
-        Vector2 camPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Board.PlayerTurn turn = FindObjectOfType<GameController>().board.turn;
 
-        SceneProperties.heldPiece = false;
-        state = PieceState.RETURNING;
-
-        //TODO fix this for block controller
-        RaycastHit2D[] hits = Physics2D.RaycastAll(camPos, Vector2.zero);
-        if (hits.Length == 0)
+        if ((blockType == BlockController.BlockState.X && turn == Board.PlayerTurn.X_TURN) ||
+            (blockType == BlockController.BlockState.O && turn == Board.PlayerTurn.O_TURN))
         {
-            //No hit found.
+            //find if block is hit:
+            SceneProperties.heldPiece = false;
             state = PieceState.RETURNING;
-            BlockController[] blocks = FindObjectsOfType<BlockController>();
-            foreach(BlockController block in blocks){
-                if(block.transform.position == placePos && !block.canMove()){
-                    block.clickSquare(blockType);
-                    returnPlace = startPos;
-                    placePos = Vector3.zero;
-                    break;
-                }
-            }            
-        } else if(hits.Length == 3){
-            //Already a piece placed
-            state = PieceState.RETURNING;
-        }
-        else {
+
+            if (fromBlock != null)
+            {
+                fromBlock.highlightSquare(blockType);
+            }
+
+            //TODO fix this for block controller
+            RaycastHit2D[] hits = getRayCastFromScreen();
             foreach (RaycastHit2D hit in hits)
             {
                 Debug.Log(hit.collider.gameObject);
@@ -85,22 +114,34 @@ public class PieceController : MonoBehaviour {
                     BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
                     if (block != null)
                     {
-                        if (block.clickSquare(blockType)) {
+                        BlockController.Action actionPerformed = block.clickSquare(blockType);
+                        Debug.Log("actionPerformed: " + actionPerformed);
+                        if (actionPerformed == BlockController.Action.PLACED || actionPerformed == BlockController.Action.MOVED)
+                        {
                             this.transform.position = block.transform.position;
                             state = PieceState.PLACED;
                             placePos = transform.position;
                             returnPlace = placePos;
+                            fromBlock = block;
                         }
                     }
                 }
             }
-        }
+            //if not placed and picked up happens, then add back to pile.
+            if (state != PieceState.PLACED)
+            {
+                if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(blockType))
+                {
+                    state = PieceState.START;
+                    returnPlace = startPos;
+                    placePos = Vector3.zero;
+                    fromBlock = null;
+                }
+            }
 
-        Vector3 pos = transform.position;
-        moveDist = new Vector3((startPos.x - pos.x)/ duration, (startPos.y - pos.y )/ duration,0);
-        //tween to start position
-        //this.transform.position = startPos;
-        //iTween.MoveTo(this.gameObject, iTween.Hash("position", 2, "easeType", "easeInOutExpo", "time", .3));
-        //iTween.moveTo(startPos);
+            Vector3 pos = transform.position;
+            moveDist = new Vector3((returnPlace.x - pos.x) / duration, (returnPlace.y - pos.y) / duration, 0);
+            Debug.Log("ON MOUSE UP: " + state);
+        }
     }
 }
