@@ -28,8 +28,9 @@ public class BlockController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        GameController gc = FindObjectOfType<GameController>();
+        state = gc.getState(x,y);
 		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-
         if (state == BlockState.O)
         {
             spriteRenderer.sprite = OPiece;
@@ -98,7 +99,7 @@ public class BlockController : MonoBehaviour {
         return returnAction;
     }
 
-	public Action clickSquare(BlockState pieceState){
+	public Action clickSquare(BlockState pieceState, bool makeMove){
         GameController gameController = FindObjectOfType<GameController>();
         if (gameController.board.turn == Board.PlayerTurn.O_TURN && pieceState != BlockState.O)
         {
@@ -118,11 +119,11 @@ public class BlockController : MonoBehaviour {
                 {
                     if (gameController.board.turn == Board.PlayerTurn.O_TURN)
                     {
-                        state = BlockState.O;
+                        //state = BlockState.O;
                     }
                     else if (gameController.board.turn == Board.PlayerTurn.X_TURN)
                     {
-                        state = BlockState.X;
+                        //state = BlockState.X;
                     }
                     BlockController[] blocks = GameObject.FindObjectsOfType<BlockController>();
                     foreach (BlockController block in blocks)
@@ -130,29 +131,41 @@ public class BlockController : MonoBehaviour {
                         if (block.highlightState == BlockHighlightState.SELECTED)
                         {
                             //found the move from. Remove it.
-                            block.state = BlockState.NUETRAL;
+                            //block.state = BlockState.NUETRAL;
                             //remove it
-                            gameController.move(block.x, block.y, false);
+                            if (makeMove)
+                            {
+                                gameController.move(block.x, block.y, false);
+                            }
                         }
                         //block.highlightState = BlockHighlightState.NUETRAL;
                     }
                     resetBlocks();
-                    gameController.move(x, y, true);
+                    if (makeMove)
+                    {
+                        gameController.move(x, y, true);
+                    }
                     returnAction = Action.MOVED;
                 }
                 else if (state == BlockState.NUETRAL)
                 {
                     if (gameController.board.turn == Board.PlayerTurn.X_TURN && gameController.board.xPieces > 0)
                     {
-                        state = BlockState.X;
-                        gameController.move(x, y, true);
-                        resetBlocks();
+                        //state = BlockState.X;
+                        if (makeMove)
+                        {
+                            gameController.move(x, y, true);
+                            resetBlocks();
+                        }
                     }
                     else if (gameController.board.turn == Board.PlayerTurn.O_TURN && gameController.board.oPieces > 0)
                     {
-                        state = BlockState.O;
-                        gameController.move(x, y, true);
-                        resetBlocks();
+                        //state = BlockState.O;
+                        if (makeMove)
+                        {
+                            gameController.move(x, y, true);
+                            resetBlocks();
+                        }
                     }
                     returnAction = Action.PLACED;
                 }
@@ -161,9 +174,12 @@ public class BlockController : MonoBehaviour {
                || (state == BlockState.X && gameController.board.turn == Board.PlayerTurn.X_TURN)))
                 {
                     // Remove a piece
-                    state = BlockState.NUETRAL;
-                    gameController.move(x, y, true);
-                    resetBlocks();
+                    //state = BlockState.NUETRAL;
+                    if (makeMove)
+                    {
+                        gameController.move(x, y, true);
+                        resetBlocks();
+                    }
                     returnAction = Action.PICKED_UP;
                 }
             }
@@ -184,6 +200,6 @@ public class BlockController : MonoBehaviour {
      * */
 	public void simulateClick(){
         allowedToClick = true;
-		clickSquare(BlockState.X);
+		clickSquare(BlockState.X, true);
 	}
 }

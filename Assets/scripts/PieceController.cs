@@ -114,15 +114,21 @@ public class PieceController : MonoBehaviour {
                     BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
                     if (block != null)
                     {
-                        BlockController.Action actionPerformed = block.clickSquare(blockType);
+                        BlockController.Action actionPerformed = block.clickSquare(blockType, false);
                         Debug.Log("actionPerformed: " + actionPerformed);
-                        if (actionPerformed == BlockController.Action.PLACED || actionPerformed == BlockController.Action.MOVED)
+                        if ((actionPerformed == BlockController.Action.PLACED && returnPlace == startPos)
+                            || actionPerformed == BlockController.Action.MOVED && returnPlace == placePos)
                         {
+                            block.clickSquare(blockType, true);
                             this.transform.position = block.transform.position;
                             state = PieceState.PLACED;
                             placePos = transform.position;
                             returnPlace = placePos;
                             fromBlock = block;
+                        }
+                        else
+                        {
+                            FindObjectOfType<GameController>().undo();
                         }
                     }
                 }
@@ -130,8 +136,9 @@ public class PieceController : MonoBehaviour {
             //if not placed and picked up happens, then add back to pile.
             if (state != PieceState.PLACED)
             {
-                if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(blockType))
+                if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(blockType, false))
                 {
+                    fromBlock.clickSquare(blockType, true);
                     state = PieceState.START;
                     returnPlace = startPos;
                     placePos = Vector3.zero;
