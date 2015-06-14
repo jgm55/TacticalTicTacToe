@@ -3,7 +3,8 @@ using System.Collections;
 using AssemblyCSharp;
 
 public class GameController : MonoBehaviour {
-	
+    public enum BlockState { NUETRAL, O, X };
+
 	public GUIStyle style;
 
 	public const int BOARD_SIZE = 4;
@@ -110,24 +111,26 @@ public class GameController : MonoBehaviour {
 	}
 
 	//Swapped x and y to match board representation
-    public BlockController.BlockState getState(int y, int x)
+    public BlockState getState(int y, int x)
     {
         if (board.positions[x][y] == 1)
         {
-            return BlockController.BlockState.O;
-        } if (board.positions[x][y] == 2)
+            return BlockState.O;
+        } 
+        if (board.positions[x][y] == 2)
         {
-            return BlockController.BlockState.X;
+            return BlockState.X;
         }
-        return BlockController.BlockState.NUETRAL;
+        return BlockState.NUETRAL;
     }
 
 	/*
 	 * Call from UI elements to perform a move on the board
 	 * */
-	public void move(int y, int x, bool updateTurn){
+    public void move(int y, int x, int fromY, int fromX, bool updateTurn)
+    {
 		if(board.turn != Board.PlayerTurn.O_WINS && board.turn != Board.PlayerTurn.X_WINS){
-			board = BoardHelper.getInstance().simulateMove(board, x, y);
+			board = BoardHelper.getInstance().simulateMove(board, x, y, fromX, fromY);
 
 			int result = BoardHelper.getInstance().checkWin(x,y, board);
 			if(1 == result){
@@ -171,13 +174,6 @@ public class GameController : MonoBehaviour {
 
 	public bool canMove(int y,int x){
 		return BoardHelper.getInstance().getMovePositions(board, x,y).Count != 0;
-	}
-
-    public void resetBlocks(){
-		BlockController[] blocks = GameObject.FindObjectsOfType<BlockController>();
-		foreach(BlockController block in blocks){
-			block.highlightState = BlockController.BlockHighlightState.NUETRAL;
-		}
 	}
 
 	void OnGUI(){

@@ -5,7 +5,7 @@ using AssemblyCSharp;
 
 public class PieceController : MonoBehaviour {
 
-    public BlockController.BlockState blockType = BlockController.BlockState.X;
+    public GameController.BlockState blockType = GameController.BlockState.X;
 
     public enum PieceState { HELD,PLACED,RETURNING,START}
 
@@ -57,8 +57,8 @@ public class PieceController : MonoBehaviour {
     void OnMouseDown()
     {
         Board.PlayerTurn turn = FindObjectOfType<GameController>().board.turn;
-        if ((blockType == BlockController.BlockState.X && turn == Board.PlayerTurn.X_TURN) || 
-            (blockType == BlockController.BlockState.O && turn == Board.PlayerTurn.O_TURN))
+        if ((blockType == GameController.BlockState.X && turn == Board.PlayerTurn.X_TURN) ||
+            (blockType == GameController.BlockState.O && turn == Board.PlayerTurn.O_TURN))
         {
             SceneProperties.heldPiece = true;
             state = PieceState.HELD;
@@ -76,7 +76,6 @@ public class PieceController : MonoBehaviour {
                         }
                     }
                 }*/
-                fromBlock.highlightSquare(blockType);
             }
             Debug.Log("ON MOUSE DOWN: " + state);
         }
@@ -92,17 +91,12 @@ public class PieceController : MonoBehaviour {
     {
         Board.PlayerTurn turn = FindObjectOfType<GameController>().board.turn;
 
-        if ((blockType == BlockController.BlockState.X && turn == Board.PlayerTurn.X_TURN) ||
-            (blockType == BlockController.BlockState.O && turn == Board.PlayerTurn.O_TURN))
+        if ((blockType == GameController.BlockState.X && turn == Board.PlayerTurn.X_TURN) ||
+            (blockType == GameController.BlockState.O && turn == Board.PlayerTurn.O_TURN))
         {
             //find if block is hit:
             SceneProperties.heldPiece = false;
             state = PieceState.RETURNING;
-
-            if (fromBlock != null)
-            {
-                fromBlock.highlightSquare(blockType);
-            }
 
             //TODO fix this for block controller
             RaycastHit2D[] hits = getRayCastFromScreen();
@@ -114,12 +108,12 @@ public class PieceController : MonoBehaviour {
                     BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
                     if (block != null)
                     {
-                        BlockController.Action actionPerformed = block.clickSquare(blockType, false);
+                        BlockController.Action actionPerformed = block.clickSquare(fromBlock, false);
                         Debug.Log("actionPerformed: " + actionPerformed);
                         if ((actionPerformed == BlockController.Action.PLACED && returnPlace == startPos)
                             || actionPerformed == BlockController.Action.MOVED && returnPlace == placePos)
                         {
-                            block.clickSquare(blockType, true);
+                            block.clickSquare(fromBlock, true);
                             this.transform.position = block.transform.position;
                             state = PieceState.PLACED;
                             placePos = transform.position;
@@ -136,10 +130,10 @@ public class PieceController : MonoBehaviour {
             //if not placed and picked up happens, then add back to pile.
             if (state != PieceState.PLACED)
             {
-                if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(blockType, false))
+                if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(fromBlock, false))
                 {
-                    fromBlock.clickSquare(blockType, true);
-                    state = PieceState.START;
+                    fromBlock.clickSquare(fromBlock, true);
+                    state = PieceState.RETURNING;
                     returnPlace = startPos;
                     placePos = Vector3.zero;
                     fromBlock = null;
