@@ -3,7 +3,8 @@ using System.Collections;
 using AssemblyCSharp;
 
 public class GameController : MonoBehaviour {
-	
+    public enum BlockState { NUETRAL, O, X };
+
 	public GUIStyle style;
 
 	public const int BOARD_SIZE = 4;
@@ -29,6 +30,9 @@ public class GameController : MonoBehaviour {
 	Vector2 oPiecesLeftPos;
 	const int FONT_SIZE = 40;
 
+    ArrayList previousBoards;
+    int previousBoardsIndex = 0;
+
 	void Awake(){
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 	}
@@ -47,6 +51,8 @@ public class GameController : MonoBehaviour {
 		winLabelRect = new Rect(resolution.x / 2 - winLabelSize.x,40*resy,winLabelSize.x * resx, winLabelSize.y*resy);
 
 		board = new Board(BOARD_SIZE, NUM_PIECES, Board.PlayerTurn.X_TURN);
+        previousBoards = new ArrayList();
+        previousBoards.Add(board);
 	}
 	
 	// Update is called once per frame
@@ -77,6 +83,14 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+   
+    public void undo()
+    {
+        board = (Board)previousBoards.GetRange(previousBoardsIndex-1,1)[0];
+        previousBoards.RemoveAt(previousBoardsIndex);
+        previousBoardsIndex--;
+    }
+
 	private void clickBlock(Vector2 click){
 		BlockController[] blocks = FindObjectsOfType<BlockController>();
 		foreach (BlockController block in blocks){
@@ -97,12 +111,26 @@ public class GameController : MonoBehaviour {
 	}
 
 	//Swapped x and y to match board representation
+    public BlockState getState(int y, int x)
+    {
+        if (board.positions[x][y] == 1)
+        {
+            return BlockState.O;
+        } 
+        if (board.positions[x][y] == 2)
+        {
+            return BlockState.X;
+        }
+        return BlockState.NUETRAL;
+    }
+
 	/*
 	 * Call from UI elements to perform a move on the board
 	 * */
-	public void move(int y, int x, bool updateTurn){
+    public void move(int y, int x, int fromY, int fromX, bool updateTurn)
+    {
 		if(board.turn != Board.PlayerTurn.O_WINS && board.turn != Board.PlayerTurn.X_WINS){
-			board = BoardHelper.getInstance().simulateMove(board, x, y);
+			board = BoardHelper.getInstance().simulateMove(board, x, y, fromX, fromY);
 
 			int result = BoardHelper.getInstance().checkWin(x,y, board);
 			if(1 == result){
@@ -120,8 +148,10 @@ public class GameController : MonoBehaviour {
 			}*/
 
 			if(updateTurn){
-				board.updateTurn();
+                board.updateTurn();
 			}
+            previousBoards.Add(board);
+            previousBoardsIndex++;
 		}
 	}
 

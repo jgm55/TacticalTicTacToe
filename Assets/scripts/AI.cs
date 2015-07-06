@@ -81,7 +81,6 @@ public class AI : MonoBehaviour {
             return 1;
         }
         return 0;
-
     }
 
 	/**

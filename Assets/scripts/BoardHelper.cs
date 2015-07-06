@@ -161,20 +161,35 @@ namespace AssemblyCSharp
 	 	* Returns the board after simulating the move on the given board
 	 	* */
 		public Board simulateMove(Board givenBoard, Vector2 position){
-			return simulateMove(givenBoard,(int)position.x, (int)position.y);
+            return simulateMove(givenBoard, (int)position.x, (int)position.y, -1, -1);
 		}
 		/**
 	 	* Returns the board after simulating the move on the given board
+         * pass in -1 for fromX and fromY if it is not a moved piece
 	 	* */
-		public Board simulateMove(Board givenBoard, int x, int y){
+		public Board simulateMove(Board givenBoard, int x, int y, int fromX, int fromY){
 			if(givenBoard.positions[x][y] == 0){
 				//1 for o, 2 for x
 				if(givenBoard.turn == Board.PlayerTurn.O_TURN){
 					givenBoard.positions[x][y] = 1;
-					givenBoard.oPieces--;
+                    if (fromX != -1 && fromY != -1)
+                    {
+                        givenBoard.positions[fromX][fromY] = 0;
+                    }
+                    else
+                    {
+                        givenBoard.oPieces--;
+                    }
 				} else if(givenBoard.turn == Board.PlayerTurn.X_TURN){
 					givenBoard.positions[x][y] = 2;
-					givenBoard.xPieces--;
+                    if (fromX != -1 && fromY != -1)
+                    {
+                        givenBoard.positions[fromX][fromY] = 0;
+                    }
+                    else
+                    {
+                        givenBoard.xPieces--;
+                    }
 				}
 			} else{ // It was removed
 				givenBoard.positions[x][y] = 0;
