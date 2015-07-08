@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour {
 
 	//Jon's illconceived code:
 	public GameObject turnIndicator;
-
+    public AudioSource piecePlaceSound;
     public enum BlockState { NUETRAL, O, X };
 
 	public GUIStyle style;
@@ -157,7 +157,7 @@ public class GameController : MonoBehaviour {
 				//added to turn indicator
 				Rotate rotateTurn = turnIndicator.GetComponent<Rotate>();
 				rotateTurn.canRotate = true;
-
+                piecePlaceSound.Play();
 			}
             previousBoards.Add(board);
             previousBoardsIndex++;
