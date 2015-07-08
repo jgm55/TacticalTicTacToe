@@ -99,6 +99,7 @@ public class PieceController : MonoBehaviour {
             state = PieceState.RETURNING;
 
             //TODO fix this for block controller
+            bool onBoard = false;
             RaycastHit2D[] hits = getRayCastFromScreen();
             foreach (RaycastHit2D hit in hits)
             {
@@ -125,10 +126,14 @@ public class PieceController : MonoBehaviour {
                             FindObjectOfType<GameController>().undo();
                         }
                     }
+                    else if (hit.collider.gameObject.tag == "Board")
+                    {
+                        onBoard = true;
+                    }
                 }
             }
             //if not placed and picked up happens, then add back to pile.
-            if (state != PieceState.PLACED)
+            if (state != PieceState.PLACED && onBoard == false)
             {
                 if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(fromBlock, false))
                 {
