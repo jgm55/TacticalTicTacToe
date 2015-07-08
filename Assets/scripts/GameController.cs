@@ -3,6 +3,10 @@ using System.Collections;
 using AssemblyCSharp;
 
 public class GameController : MonoBehaviour {
+
+	//Jon's illconceived code:
+	public GameObject turnIndicator;
+
     public enum BlockState { NUETRAL, O, X };
 
 	public GUIStyle style;
@@ -149,6 +153,11 @@ public class GameController : MonoBehaviour {
 
 			if(updateTurn){
                 board.updateTurn();
+
+				//added to turn indicator
+				Rotate rotateTurn = turnIndicator.GetComponent<Rotate>();
+				rotateTurn.canRotate = true;
+
 			}
             previousBoards.Add(board);
             previousBoardsIndex++;
@@ -178,7 +187,6 @@ public class GameController : MonoBehaviour {
 
 	void OnGUI(){
 		style.fontSize = FONT_SIZE;
-
 		GUI.Label(xPiecesLeftRect, "X Pieces: " + board.xPieces.ToString(), style);
 		GUI.Label(oPiecesLeftRect, "O Pieces: " + board.oPieces.ToString(), style);
 		//TODO: display player turn
