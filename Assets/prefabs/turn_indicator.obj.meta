@@ -1,0 +1,136 @@
+fileFormatVersion: 2
+guid: 963f152df045a1d49a35816ea9350d00
+timeCreated: 1436320193
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: background
+    100002: o_face
+    100004: o_player
+    100006: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface22_o_circle
+    100008: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface26_o_circle
+    100010: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface27_o_circle
+    100012: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface28_o_circle
+    100014: //RootNode
+    100016: x_arrow_1
+    100018: x_arrow_2
+    100020: x_arrow_3
+    100022: x_arrow_4
+    100024: x_face
+    100026: x_player
+    400000: background
+    400002: o_face
+    400004: o_player
+    400006: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface22_o_circle
+    400008: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface26_o_circle
+    400010: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface27_o_circle
+    400012: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface28_o_circle
+    400014: //RootNode
+    400016: x_arrow_1
+    400018: x_arrow_2
+    400020: x_arrow_3
+    400022: x_arrow_4
+    400024: x_face
+    400026: x_player
+    2300000: background
+    2300002: o_face
+    2300004: o_player
+    2300006: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface22_o_circle
+    2300008: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface26_o_circle
+    2300010: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface27_o_circle
+    2300012: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface28_o_circle
+    2300014: x_arrow_1
+    2300016: x_arrow_2
+    2300018: x_arrow_3
+    2300020: x_arrow_4
+    2300022: x_face
+    2300024: x_player
+    3300000: background
+    3300002: o_face
+    3300004: o_player
+    3300006: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface22_o_circle
+    3300008: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface26_o_circle
+    3300010: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface27_o_circle
+    3300012: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface28_o_circle
+    3300014: x_arrow_1
+    3300016: x_arrow_2
+    3300018: x_arrow_3
+    3300020: x_arrow_4
+    3300022: x_face
+    3300024: x_player
+    4300000: background
+    4300002: o_face
+    4300004: o_player
+    4300006: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface22_o_circle
+    4300008: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface26_o_circle
+    4300010: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface27_o_circle
+    4300012: O_playerTurnIndicator:Default_O_playerTurnIndicator:polySurface28_o_circle
+    4300014: x_arrow_1
+    4300016: x_arrow_2
+    4300018: x_arrow_3
+    4300020: x_arrow_4
+    4300022: x_face
+    4300024: x_player
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .0299999993
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
