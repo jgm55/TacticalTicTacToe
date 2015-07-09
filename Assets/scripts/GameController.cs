@@ -90,7 +90,7 @@ public class GameController : MonoBehaviour {
    
     public void undo()
     {
-        board = (Board)previousBoards.GetRange(previousBoardsIndex-1,1)[0];
+        board = (Board)previousBoards[previousBoardsIndex];
         previousBoards.RemoveAt(previousBoardsIndex);
         previousBoardsIndex--;
     }

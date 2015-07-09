@@ -123,7 +123,7 @@ public class PieceController : MonoBehaviour {
                         }
                         else
                         {
-                            FindObjectOfType<GameController>().undo();
+                            //FindObjectOfType<GameController>().undo();
                         }
                     }
                     else if (hit.collider.gameObject.tag == "Board")
