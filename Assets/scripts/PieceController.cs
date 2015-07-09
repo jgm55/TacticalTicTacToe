@@ -107,7 +107,7 @@ public class PieceController : MonoBehaviour {
                 if (hit.collider.gameObject != this.gameObject)
                 {
                     BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
-                    if (block != null)
+                    if (block != null && block.state == GameController.BlockState.NUETRAL)
                     {
                         BlockController.Action actionPerformed = block.clickSquare(fromBlock, false);
                         Debug.Log("actionPerformed: " + actionPerformed);

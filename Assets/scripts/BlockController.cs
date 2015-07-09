@@ -14,7 +14,7 @@ public class BlockController : MonoBehaviour {
 	//NOTE: Must Set these when instantiate object
 	public int x, y;
     public enum Action { NONE, MOVED, PICKED_UP, PLACED, SELECTED,DE_SELECTED};
-    GameController.BlockState state;
+    public GameController.BlockState state;
 
 	// Use this for initialization
 	void Start () {
