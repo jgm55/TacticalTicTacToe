@@ -186,7 +186,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	void OnGUI(){
-		style.fontSize = FONT_SIZE;
+		/*style.fontSize = FONT_SIZE;
 		GUI.Label(xPiecesLeftRect, "X Pieces: " + board.xPieces.ToString(), style);
 		GUI.Label(oPiecesLeftRect, "O Pieces: " + board.oPieces.ToString(), style);
 		//TODO: display player turn
@@ -199,6 +199,6 @@ public class GameController : MonoBehaviour {
 		} else if(board.turn == Board.PlayerTurn.X_TURN){
 			GUI.Label(winLabelRect, "X Turn...", style);
 		}
-		//TODO: add highlighting of winning path
+		//TODO: add highlighting of winning path*/
 	}
 }
