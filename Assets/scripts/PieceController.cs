@@ -9,6 +9,8 @@ public class PieceController : MonoBehaviour {
 
     public enum PieceState { HELD,PLACED,RETURNING,START}
 
+    float rotationScalar = 10f;
+
     PieceState state = PieceState.START;
 
     Vector3 startPos;
@@ -20,10 +22,14 @@ public class PieceController : MonoBehaviour {
     float duration = .5f;
     Vector3 moveDist;
 
+    float velocityX = 0f;
+    Vector3 lastPosition;
+
 	// Use this for initialization
 	void Start () {
         startPos = this.transform.position;
         returnPlace = startPos;
+        lastPosition = this.transform.position;
 	}
 	
 	// Update is called once per frame
@@ -51,8 +57,19 @@ public class PieceController : MonoBehaviour {
             this.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 pos = this.transform.position;
             this.transform.position = new Vector3(pos.x, pos.y, startPos.z);
+
+            //roation things
+            velocityX = (lastPosition.x - this.transform.position.x) / Time.deltaTime * rotationScalar;
+
+            this.transform.rotation = Quaternion.RotateTowards(Quaternion.Euler(new Vector3(270, 0, 0)),
+                Quaternion.Euler(new Vector3(270, 60, 0)), Mathf.Clamp(velocityX, -20, 20));
         }
-	}
+        else
+        {
+            this.transform.rotation = Quaternion.Euler(new Vector3(270, 0, 0));
+        }
+        lastPosition = this.transform.position;
+    }
 
     void OnMouseDown()
     {
@@ -149,5 +166,6 @@ public class PieceController : MonoBehaviour {
             moveDist = new Vector3((returnPlace.x - pos.x) / duration, (returnPlace.y - pos.y) / duration, 0);
             Debug.Log("ON MOUSE UP: " + state);
         }
+
     }
 }
