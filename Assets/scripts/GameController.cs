@@ -90,9 +90,12 @@ public class GameController : MonoBehaviour {
    
     public void undo()
     {
-        board = (Board)previousBoards[previousBoardsIndex];
+        Board oldBoard = (Board)previousBoards[previousBoardsIndex];
         previousBoards.RemoveAt(previousBoardsIndex);
         previousBoardsIndex--;
+        board = (Board)previousBoards[previousBoardsIndex];
+        Move move = BoardHelper.getInstance().compareBoards(oldBoard, board);
+
     }
 
 	private void clickBlock(Vector2 click){

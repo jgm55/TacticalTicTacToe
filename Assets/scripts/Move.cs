@@ -11,35 +11,34 @@ using System;
 using UnityEngine;
 namespace AssemblyCSharp
 {
+    public enum MoveType
+    {
+        REMOVE, MOVE, PLACE
+    }
 	public class Move
 	{
+        MoveType type;
 		private Vector2 position;
 		private Vector2 position2;
 
 		/*
 		 * Takes in multiple positions to click
 		 * */
-		public Move (int x, int y, float x2, float y2)
+		public Move (Vector2 oldPos, Vector2 newPos)
 		{
-			position = new Vector2(x,y);
-			position2 = new Vector2(x2,y2);
-			
-		}
-
-		/*
-		 * Takes in multiple positions to click
-		 * */
-		public Move (int x, int y, Vector2 newPos) : this(x,y,newPos.x,newPos.y)
-		{
+            position = oldPos;
+            position2 = newPos;
+            type = MoveType.MOVE;
 		}
 
 		/*
 		 * Takes in just a single position to click
 		 * */
-		public Move (int x, int y)
+		public Move (int x, int y, MoveType type)
 		{
 			position = new Vector2(x,y);
 			position2 = new Vector2(-1,-1);
+            this.type = type;
 		}
 
 		/**

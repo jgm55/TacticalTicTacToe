@@ -52,16 +52,16 @@ public class AI : MonoBehaviour {
                 if ((board.xPieces > 0 && board.turn == Board.PlayerTurn.X_TURN) || (board.oPieces > 0 && board.turn == Board.PlayerTurn.O_TURN))
                 {//Check if enough pieces
                     if(board.positions[i][j] == 0){//Then check if space is free
-					    set.Add(new Move(i,j));
+					    set.Add(new Move(i,j,MoveType.PLACE));
                     }
 				} else if(board.positions[i][j] == getPieceNumber(board.turn)) {
 					ArrayList positions = BoardHelper.getInstance().getMovePositions(board,i,j);
 					//can remove
 					if(positions.Count == 0){
-						set.Add(new Move(i,j));
+						set.Add(new Move(i,j,MoveType.REMOVE));
 					} else {//add all move positions to set
 						foreach(Vector2 vector in positions){
-							set.Add(new Move(i,j,vector));
+							set.Add(new Move(new Vector2(i,j),vector));
 						}
 					}
 				}

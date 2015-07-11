@@ -24,6 +24,19 @@ namespace AssemblyCSharp
 		public int xPieces;
 		public PlayerTurn turn;
 
+        public GameController.BlockState getStateOfSquare(int x, int y)
+        {
+            switch (positions[x][y])
+            {
+                case 1:
+                    return GameController.BlockState.O;
+                case 2:
+                    return GameController.BlockState.X;
+                default:
+                    return GameController.BlockState.NUETRAL;
+            }
+        }
+
 		public Board (int boardSize, int piecesStart, PlayerTurn startTurn)
 		{
 			oPieces = piecesStart;
