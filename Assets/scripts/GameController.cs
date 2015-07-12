@@ -167,7 +167,6 @@ public class GameController : MonoBehaviour {
             newBoard = BoardHelper.getInstance().simulateMove(newBoard, x, y, fromX, fromY);
 
 			int result = BoardHelper.getInstance().checkWin(x,y, newBoard);
-            Debug.Log("Game result: " + result);
 			if(1 == result){
 				//O wins
                 newBoard.turn = Board.PlayerTurn.O_WINS;

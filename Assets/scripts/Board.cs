@@ -19,6 +19,7 @@ namespace AssemblyCSharp
 		/**
 		 * 0 is empty, 1 is O, 2 is x
 		 * */
+        private int numberMoves;
 		public int[][]positions;
 		public int oPieces;
 		public int xPieces;
@@ -52,6 +53,7 @@ namespace AssemblyCSharp
 				}
 				positions[i] = temp;
 			}
+            numberMoves = 0;
 		}
 
 		public Board(Board other){
@@ -69,6 +71,7 @@ namespace AssemblyCSharp
 				}
 				positions[i] = temp;
 			}
+            this.numberMoves = other.numberMoves;
 		}
 
 		public void updateTurn(){
@@ -77,6 +80,7 @@ namespace AssemblyCSharp
 			} else if(turn == PlayerTurn.X_TURN){
 				turn = PlayerTurn.O_TURN;
 			}
+            numberMoves++;
 		}
 
         public override string ToString()
@@ -89,6 +93,11 @@ namespace AssemblyCSharp
             }
             return str;
         }
-	}
+
+        internal bool isFirstMove()
+        {
+            return numberMoves==0 || numberMoves == 1;
+        }
+    }
 }
 

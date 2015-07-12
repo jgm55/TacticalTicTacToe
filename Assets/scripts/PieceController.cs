@@ -134,14 +134,12 @@ public class PieceController : MonoBehaviour {
             RaycastHit2D[] hits = AnimationHelper.getRayCastFromScreen(mousePos);
             foreach (RaycastHit2D hit in hits)
             {
-                Debug.Log(hit.collider.gameObject);
                 if (hit.collider.gameObject != this.gameObject)
                 {
                     BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
                     if (block != null && block.state == GameController.BlockState.NUETRAL)
                     {
                         BlockController.Action actionPerformed = block.clickSquare(fromBlock, false);
-                        Debug.Log("actionPerformed: " + actionPerformed);
                         if ((actionPerformed == BlockController.Action.PLACED && returnPlace == startPos)
                             || actionPerformed == BlockController.Action.MOVED && returnPlace == placePos)
                         {

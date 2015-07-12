@@ -19,13 +19,18 @@ public class AI : MonoBehaviour {
 	static public int COMPUTER_NUMBER = 2;
 	static public int PLAYER_NUMBER = 1;
 
-
 	public static Move makeMove(Board board){
-		ScoreMove val = minimax(board,MAX_DEPTH,int.MinValue, int.MaxValue, true);
-		Debug.Log(val.score);
-		if(val.move!= null){
-			return val.move;
-		}
+        //If not the first move
+        if (!board.isFirstMove())
+        {
+            Debug.Log("Not First Move");
+            ScoreMove val = minimax(board, MAX_DEPTH, int.MinValue, int.MaxValue, true);
+            Debug.Log(val.score);
+            if (val.move != null)
+            {
+                return val.move;
+            }
+        }
 
 		Debug.Log("Returning random Move");
 
