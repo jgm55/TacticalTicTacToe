@@ -20,8 +20,7 @@ public class AI : MonoBehaviour {
 	static public int PLAYER_NUMBER = 1;
 
 
-	public static Move makeMove(Board _board){
-        Board board = new Board(_board);
+	public static Move makeMove(Board board){
 		ScoreMove val = minimax(board,MAX_DEPTH,int.MinValue, int.MaxValue, true);
 		Debug.Log(val.score);
 		if(val.move!= null){
