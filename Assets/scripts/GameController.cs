@@ -9,6 +9,9 @@ public class GameController : MonoBehaviour {
     public AudioSource piecePlaceSound;
     public enum BlockState { NUETRAL, O, X };
 
+    private const float UNDO_DELAY = 1f;
+    private float undoCounter = 0f;
+
 	public GUIStyle style;
 
 	public const int BOARD_SIZE = 4;
@@ -61,7 +64,7 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(SceneProperties.aiPlaying){
+		if(SceneProperties.aiPlaying && undoCounter > UNDO_DELAY){
             if (board.turn == SceneProperties.aiTurn && !moving)
             {
                 Move m = AI.makeMove(board);
@@ -70,7 +73,7 @@ public class GameController : MonoBehaviour {
                 this.move(m, true, true);
 			}
 		}
-
+        undoCounter += Time.deltaTime;
 		if(board.turn == Board.PlayerTurn.O_WINS || board.turn == Board.PlayerTurn.X_WINS){
 			if(Input.GetMouseButton(0) && doneCoooldown <= doneCounter){
 				Application.LoadLevel("TitleScreen");
@@ -108,6 +111,7 @@ public class GameController : MonoBehaviour {
         flipSign();
         board = oldBoard;
         Debug.Log("Board after undo: \n" + board);
+        undoCounter = 0f;
         return m;
     }
 
