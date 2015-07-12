@@ -61,23 +61,15 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		/*if(SceneProperties.aiPlaying){
-			if(board.turn == Board.PlayerTurn.X_TURN && !moving){
-				//TODO update this to not always be x
-				Move move = AI.makeMove(board);
-                Debug.Log("Board");
-			    /*for(int i=0;i<BOARD_SIZE;i++){
-				    Debug.Log(board.positions[i][0]+" "+board.positions[i][1]+" "
-				              +board.positions[i][2]+" "+board.positions[i][3]);
-			    }//*//*
-                //Debug.Log(move);
-				Vector2[] clicks = move.getClicks();
-				clickBlock(clicks[0]);
-				if(clicks.Length == 2) {
-					StartCoroutine(ClickAfterTime(1f, clicks[1]));
-				}
+		if(SceneProperties.aiPlaying){
+            if (board.turn == SceneProperties.aiTurn && !moving)
+            {
+                Move m = AI.makeMove(board);
+                Debug.Log("Move: " + m);
+                AnimationHelper.doMove(m);
+                this.move(m, true, true);
 			}
-		}*/
+		}
 
 		if(board.turn == Board.PlayerTurn.O_WINS || board.turn == Board.PlayerTurn.X_WINS){
 			if(Input.GetMouseButton(0) && doneCoooldown <= doneCounter){
@@ -152,9 +144,16 @@ public class GameController : MonoBehaviour {
         return BlockState.NUETRAL;
     }
 
-    public void move(Move m, bool updateStack)
+    public void move(Move m, bool updateTurn, bool updateStack)
     {
-        move((int)m.getPositionOne().y, (int)m.getPositionOne().x, (int)m.getPositionTwo().y, (int)m.getPositionTwo().x, true, updateStack);
+        if (m.getPositionTwo().x != -1)
+        {
+            move((int)m.getPositionTwo().y, (int)m.getPositionTwo().x, (int)m.getPositionOne().y, (int)m.getPositionOne().x, updateTurn, updateStack);
+        }
+        else
+        {
+            move((int)m.getPositionOne().y, (int)m.getPositionOne().x, -1, -1, updateTurn, updateStack);
+        }
     }
 
 	/*

@@ -88,7 +88,7 @@ namespace AssemblyCSharp
 
 		public override string ToString ()
 		{
-			return position.ToString() + " " + position2.ToString();
+			return position.ToString() + " " + position2.ToString() + " " + type;
 		}
 	}
 }
