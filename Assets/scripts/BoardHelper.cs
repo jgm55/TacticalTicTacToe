@@ -43,6 +43,7 @@ namespace AssemblyCSharp
                     {
                         Vector2 v = new Vector2(i, j);
                         wrongSpots.Add(v);
+                        Debug.Log("Foudn difference at : " + i + " " + j);
                     }
                 }
             }
@@ -51,15 +52,16 @@ namespace AssemblyCSharp
             //Move is...
             //removed if board is 0 and older is x or o and only 1
             //placed if only 1 and alder was 0
+            //BUT I want to return the reverse of this, so logic swap now
             if (wrongSpots.Count == 1)
             {
                 int x = (int)wrongSpots[0].x;
                 int y = (int)wrongSpots[0].y;
                 if(board.getStateOfSquare(x,y) == GameController.BlockState.NUETRAL){
-                    Move move = new Move(x, y, MoveType.REMOVE);
+                    Move move = new Move(x, y, MoveType.PLACE);
                     return move;
                 } else if(olderBoard.getStateOfSquare(x,y) == GameController.BlockState.NUETRAL){
-                    Move move = new Move(x, y, MoveType.PLACE);
+                    Move move = new Move(x, y, MoveType.REMOVE);
                     return move;
                 }
                 else
@@ -76,12 +78,12 @@ namespace AssemblyCSharp
                 //if new board is nuetral, then it was moved from here
                 if (board.getStateOfSquare(x, y) == GameController.BlockState.NUETRAL)
                 {
-                    Move move = new Move(wrongSpots[0],wrongSpots[1]);
+                    Move move = new Move(wrongSpots[1],wrongSpots[0]);
                     return move;
                 }//if older board was nuetral, it was moved to here
                 else if (olderBoard.getStateOfSquare(x, y) == GameController.BlockState.NUETRAL)
                 {
-                    Move move = new Move(wrongSpots[1], wrongSpots[0]);
+                    Move move = new Move(wrongSpots[0], wrongSpots[1]);
                     return move;
                 }
                 else

@@ -17,9 +17,9 @@ namespace AssemblyCSharp
     }
 	public class Move
 	{
-        MoveType type;
+        public MoveType type;
 		private Vector2 position;
-		private Vector2 position2;
+		private Vector2 position2 = new Vector2(-1,-1);
 
 		/*
 		 * Takes in multiple positions to click
@@ -56,6 +56,16 @@ namespace AssemblyCSharp
 			clicks[0] = position;
 			return clicks;
 		}
+
+        public Vector2 getPositionOne()
+        {
+            return position;
+        }
+
+        public Vector2 getPositionTwo()
+        {
+            return position2;
+        }
 
 		public bool Equals(Move p)
 		{

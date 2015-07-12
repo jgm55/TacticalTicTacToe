@@ -61,7 +61,7 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(SceneProperties.aiPlaying){
+		/*if(SceneProperties.aiPlaying){
 			if(board.turn == Board.PlayerTurn.X_TURN && !moving){
 				//TODO update this to not always be x
 				Move move = AI.makeMove(board);
@@ -69,7 +69,7 @@ public class GameController : MonoBehaviour {
 			    /*for(int i=0;i<BOARD_SIZE;i++){
 				    Debug.Log(board.positions[i][0]+" "+board.positions[i][1]+" "
 				              +board.positions[i][2]+" "+board.positions[i][3]);
-			    }//*/
+			    }//*//*
                 //Debug.Log(move);
 				Vector2[] clicks = move.getClicks();
 				clickBlock(clicks[0]);
@@ -84,18 +84,39 @@ public class GameController : MonoBehaviour {
 				Application.LoadLevel("TitleScreen");
 			}
 			doneCounter+=Time.deltaTime;
-		}
+		}*/
 	}
 
-   
-    public void undo()
+    public BlockState turnToBlockType()
     {
-        Board oldBoard = (Board)previousBoards[previousBoardsIndex];
+        switch (board.turn)
+        {
+            case Board.PlayerTurn.X_TURN:
+                return BlockState.X;
+            case Board.PlayerTurn.O_TURN:
+                return BlockState.O;
+            default:
+                throw new UnityException("Cannot change type "+board.turn+ " into a blockstate");
+        }
+    }
+
+    public Move undo()
+    {
+        if (previousBoardsIndex == 0)
+        {
+            throw new UnityException("Cannot undo more");
+        }
+        Board newerBoard = (Board)previousBoards[previousBoardsIndex];
         previousBoards.RemoveAt(previousBoardsIndex);
         previousBoardsIndex--;
-        board = (Board)previousBoards[previousBoardsIndex];
-        Move move = BoardHelper.getInstance().compareBoards(oldBoard, board);
 
+        Board oldBoard = (Board)previousBoards[previousBoardsIndex];
+        Move m = BoardHelper.getInstance().compareBoards(newerBoard, oldBoard);
+        //move(m, false);
+        flipSign();
+        board = oldBoard;
+        Debug.Log("Board after undo: \n" + board);
+        return m;
     }
 
 	private void clickBlock(Vector2 click){
@@ -131,41 +152,54 @@ public class GameController : MonoBehaviour {
         return BlockState.NUETRAL;
     }
 
+    public void move(Move m, bool updateStack)
+    {
+        move((int)m.getPositionOne().y, (int)m.getPositionOne().x, (int)m.getPositionTwo().y, (int)m.getPositionTwo().x, true, updateStack);
+    }
+
 	/*
 	 * Call from UI elements to perform a move on the board
 	 * */
-    public void move(int y, int x, int fromY, int fromX, bool updateTurn)
+    public void move(int y, int x, int fromY, int fromX, bool updateTurn, bool updateStack=true)
     {
-		if(board.turn != Board.PlayerTurn.O_WINS && board.turn != Board.PlayerTurn.X_WINS){
-			board = BoardHelper.getInstance().simulateMove(board, x, y, fromX, fromY);
+        Board newBoard = new Board(board);
+        if (newBoard.turn != Board.PlayerTurn.O_WINS && newBoard.turn != Board.PlayerTurn.X_WINS)
+        {
+            newBoard = BoardHelper.getInstance().simulateMove(newBoard, x, y, fromX, fromY);
 
 			int result = BoardHelper.getInstance().checkWin(x,y, board);
 			if(1 == result){
 				//O wins
-				board.turn = Board.PlayerTurn.O_WINS;
+                newBoard.turn = Board.PlayerTurn.O_WINS;
 			} else if(2 == result){
 				//x wins
-				board.turn = Board.PlayerTurn.X_WINS;
+                newBoard.turn = Board.PlayerTurn.X_WINS;
 			}
 
-/*			Debug.Log("Board");
-			for(int i=0;i<BOARD_SIZE;i++){
-				Debug.Log(board.positions[i][0]+" "+board.positions[i][1]+" "
-				          +board.positions[i][2]+" "+board.positions[i][3]);
-			}*/
+			Debug.Log("Board\n" + newBoard);
+			
 
 			if(updateTurn){
-                board.updateTurn();
+                newBoard.updateTurn();
 
-				//added to turn indicator
-				Rotate rotateTurn = turnIndicator.GetComponent<Rotate>();
-				rotateTurn.canRotate = true;
-                piecePlaceSound.Play();
+                flipSign();
 			}
-            previousBoards.Add(board);
-            previousBoardsIndex++;
+            if (updateStack)
+            {
+                previousBoards.Add(newBoard);
+                previousBoardsIndex++;
+            }
+            board = newBoard;
 		}
 	}
+
+    private void flipSign()
+    {
+        //added to turn indicator
+        Rotate rotateTurn = turnIndicator.GetComponent<Rotate>();
+        rotateTurn.canRotate = true;
+        piecePlaceSound.Play();
+    }
 
 	/**
 	 * Return an ArrayList of blockControllers of x,y coordinates where can move

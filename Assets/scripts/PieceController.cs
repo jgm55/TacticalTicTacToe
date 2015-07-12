@@ -13,7 +13,7 @@ public class PieceController : MonoBehaviour {
 
     float VELOCITY_FOR_WIND = 100f;
 
-    PieceState state = PieceState.START;
+    public PieceState state = PieceState.START;
 
     Vector3 startPos;
     Vector3 placePos = Vector3.zero;
@@ -36,6 +36,10 @@ public class PieceController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        Vector3 mousePos = Input.mousePosition;
+        if(SceneProperties.aiMoving){
+            mousePos = AnimationHelper.virtualMousePos;
+        }
         if (state == PieceState.RETURNING)
         {
             this.transform.position += Time.deltaTime* moveDist;
@@ -56,7 +60,7 @@ public class PieceController : MonoBehaviour {
         }
         if (state == PieceState.HELD)
         {
-            this.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            this.transform.position = Camera.main.ScreenToWorldPoint(mousePos);
             Vector3 pos = this.transform.position;
             this.transform.position = new Vector3(pos.x, pos.y, startPos.z);
 
@@ -107,12 +111,6 @@ public class PieceController : MonoBehaviour {
         }
     }
 
-    RaycastHit2D[] getRayCastFromScreen()
-    {
-        Vector2 camPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        return Physics2D.RaycastAll(camPos, Vector2.zero);
-    }
-
     void OnMouseUp()
     {
         Board.PlayerTurn turn = FindObjectOfType<GameController>().board.turn;
@@ -126,7 +124,14 @@ public class PieceController : MonoBehaviour {
 
             //TODO fix this for block controller
             bool onBoard = false;
-            RaycastHit2D[] hits = getRayCastFromScreen();
+
+            Vector3 mousePos = Input.mousePosition;
+            if (SceneProperties.aiMoving)
+            {
+                mousePos = AnimationHelper.virtualMousePos;
+            }
+
+            RaycastHit2D[] hits = AnimationHelper.getRayCastFromScreen(mousePos);
             foreach (RaycastHit2D hit in hits)
             {
                 Debug.Log(hit.collider.gameObject);
@@ -164,10 +169,7 @@ public class PieceController : MonoBehaviour {
                 if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(fromBlock, false))
                 {
                     fromBlock.clickSquare(fromBlock, true);
-                    state = PieceState.RETURNING;
-                    returnPlace = startPos;
-                    placePos = Vector3.zero;
-                    fromBlock = null;
+                    returnToStart();
                 }
             }
 
@@ -176,5 +178,21 @@ public class PieceController : MonoBehaviour {
             Debug.Log("ON MOUSE UP: " + state);
         }
 
+    }
+
+    public void returnToStart()
+    {
+        state = PieceState.RETURNING;
+        returnPlace = startPos;
+        placePos = Vector3.zero;
+        fromBlock = null;
+    }
+
+    public void goToBlock(BlockController block)
+    {
+        state = PieceState.RETURNING;
+        placePos = block.transform.position;
+        returnPlace = placePos;
+        fromBlock = block;
     }
 }

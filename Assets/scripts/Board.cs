@@ -78,6 +78,17 @@ namespace AssemblyCSharp
 				turn = PlayerTurn.O_TURN;
 			}
 		}
+
+        public override string ToString()
+        {
+            string str = "";
+            for (int i = 0; i < positions.Length; i++)
+            {
+                str += positions[i][0] + " " + positions[i][1] + " "
+                          + positions[i][2] + " " + positions[i][3] + "\n";
+            }
+            return str;
+        }
 	}
 }
 
