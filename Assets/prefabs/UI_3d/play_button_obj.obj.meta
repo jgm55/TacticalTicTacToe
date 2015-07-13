@@ -9,19 +9,54 @@ ModelImporter:
     100002: play
     100004: //RootNode
     100006: play_button_border_Default
+    100008: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface20
+    100010: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface25
+    100012: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1
+    100014: play_button_obj:play_polySurface21
+    100016: polySurface1
+    100018: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1_polySurface28
+    100020: play_button_obj:Default_play_button_obj:play_button_border_polySurface27_polySurface19_play_button_obj:polySurface1
     400000: Default_plac_button_face
     400002: play
     400004: //RootNode
     400006: play_button_border_Default
+    400008: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface20
+    400010: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface25
+    400012: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1
+    400014: play_button_obj:play_polySurface21
+    400016: polySurface1
+    400018: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1_polySurface28
+    400020: play_button_obj:Default_play_button_obj:play_button_border_polySurface27_polySurface19_play_button_obj:polySurface1
     2300000: Default_plac_button_face
     2300002: play
     2300004: play_button_border_Default
+    2300006: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface20
+    2300008: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface25
+    2300010: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1
+    2300012: play_button_obj:play_polySurface21
+    2300014: polySurface1
+    2300016: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1_polySurface28
+    2300018: play_button_obj:Default_play_button_obj:play_button_border_polySurface27_polySurface19_play_button_obj:polySurface1
     3300000: Default_plac_button_face
     3300002: play
     3300004: play_button_border_Default
+    3300006: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface20
+    3300008: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface25
+    3300010: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1
+    3300012: play_button_obj:play_polySurface21
+    3300014: polySurface1
+    3300016: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1_polySurface28
+    3300018: play_button_obj:Default_play_button_obj:play_button_border_polySurface27_polySurface19_play_button_obj:polySurface1
     4300000: Default_plac_button_face
     4300002: play
     4300004: play_button_border_Default
+    4300006: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface20
+    4300008: play_button_obj:Default_play_button_obj:plac_button_face_play_button_obj:polySurface1_polySurface25
+    4300010: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1
+    4300012: play_button_obj:play_polySurface21
+    4300014: polySurface1
+    4300016: play_button_obj:Default_play_button_obj:play_button_border_polySurface19_play_button_obj:polySurface1_polySurface28
+    4300018: play_button_obj:Default_play_button_obj:play_button_border_polySurface27_polySurface19_play_button_obj:polySurface1
   materials:
     importMaterials: 1
     materialName: 0
