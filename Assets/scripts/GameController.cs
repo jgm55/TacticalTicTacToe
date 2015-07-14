@@ -80,6 +80,10 @@ public class GameController : MonoBehaviour {
 			}
 			doneCounter+=Time.deltaTime;
 		}
+
+        if(turnIndicator.GetComponent<Rotate>().turn != this.board.turn){
+            flipSign();
+        }
 	}
 
     public BlockState turnToBlockType()
@@ -108,7 +112,6 @@ public class GameController : MonoBehaviour {
         Board oldBoard = (Board)previousBoards[previousBoardsIndex];
         Move m = BoardHelper.getInstance().compareBoards(newerBoard, oldBoard);
         //move(m, false);
-        flipSign();
         board = oldBoard;
         Debug.Log("Board after undo: \n" + board);
         undoCounter = 0f;
@@ -185,7 +188,6 @@ public class GameController : MonoBehaviour {
 			if(updateTurn){
                 newBoard.updateTurn();
 
-                flipSign();
 			}
             if (updateStack)
             {
@@ -201,6 +203,7 @@ public class GameController : MonoBehaviour {
         //added to turn indicator
         Rotate rotateTurn = turnIndicator.GetComponent<Rotate>();
         rotateTurn.canRotate = true;
+        rotateTurn.turn = board.turn;
         piecePlaceSound.Play();
     }
 
