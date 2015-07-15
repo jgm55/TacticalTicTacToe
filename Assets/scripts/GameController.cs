@@ -16,7 +16,8 @@ public class GameController : MonoBehaviour {
 
 	public const int BOARD_SIZE = 4;
 	public const int NUM_PIECES = 5;
-
+    //Jon
+    //Cooldown in seconds until can click. Make this the animation speed
 	float doneCoooldown = 1;
 	float doneCounter = 0;
 	bool moving = false;
@@ -74,10 +75,14 @@ public class GameController : MonoBehaviour {
 			}
 		}
         undoCounter += Time.deltaTime;
+        //Jon
+        //Look here is the win stuff.
 		if(board.turn == Board.PlayerTurn.O_WINS || board.turn == Board.PlayerTurn.X_WINS){
 			if(Input.GetMouseButton(0) && doneCoooldown <= doneCounter){
 				Application.LoadLevel("TitleScreen");
 			}
+            //Add your jawn here, bro.
+            //Then update doneCooldown to be the animation speed, probably
 			doneCounter+=Time.deltaTime;
 		}
 
