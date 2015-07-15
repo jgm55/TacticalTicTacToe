@@ -78,14 +78,7 @@ public class BlockController : MonoBehaviour {
     public Action clickSquare(BlockController fromBlock, bool makeMove)
     {
         GameController gameController = FindObjectOfType<GameController>();
-        /*if (gameController.board.turn == Board.PlayerTurn.O_TURN && pieceState != BlockState.O)
-        {
-            return Action.NONE;
-        } 
-        if (gameController.board.turn == Board.PlayerTurn.X_TURN && pieceState != BlockState.X)
-        {
-            return Action.NONE;
-        }*/
+        
         Action returnAction = Action.NONE;
         if (!SceneProperties.aiPlaying || (SceneProperties.aiPlaying && gameController.board.turn != Board.PlayerTurn.X_TURN || allowedToClick))
         {
@@ -162,8 +155,8 @@ public class BlockController : MonoBehaviour {
     /**
      * Call by the AI system ONLY, please
      * */
-	public void simulateClick(){
+	public void simulateClick(BlockController fromBlock=null){
         allowedToClick = true;
-		//clickSquare(BlockState.X, true);
+        clickSquare(fromBlock, true);
 	}
 }

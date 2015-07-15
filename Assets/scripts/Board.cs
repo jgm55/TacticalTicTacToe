@@ -19,10 +19,24 @@ namespace AssemblyCSharp
 		/**
 		 * 0 is empty, 1 is O, 2 is x
 		 * */
+        private int numberMoves;
 		public int[][]positions;
 		public int oPieces;
 		public int xPieces;
 		public PlayerTurn turn;
+
+        public GameController.BlockState getStateOfSquare(int x, int y)
+        {
+            switch (positions[x][y])
+            {
+                case 1:
+                    return GameController.BlockState.O;
+                case 2:
+                    return GameController.BlockState.X;
+                default:
+                    return GameController.BlockState.NUETRAL;
+            }
+        }
 
 		public Board (int boardSize, int piecesStart, PlayerTurn startTurn)
 		{
@@ -39,6 +53,7 @@ namespace AssemblyCSharp
 				}
 				positions[i] = temp;
 			}
+            numberMoves = 0;
 		}
 
 		public Board(Board other){
@@ -56,6 +71,7 @@ namespace AssemblyCSharp
 				}
 				positions[i] = temp;
 			}
+            this.numberMoves = other.numberMoves;
 		}
 
 		public void updateTurn(){
@@ -64,7 +80,24 @@ namespace AssemblyCSharp
 			} else if(turn == PlayerTurn.X_TURN){
 				turn = PlayerTurn.O_TURN;
 			}
+            numberMoves++;
 		}
-	}
+
+        public override string ToString()
+        {
+            string str = "";
+            for (int i = 0; i < positions.Length; i++)
+            {
+                str += positions[i][0] + " " + positions[i][1] + " "
+                          + positions[i][2] + " " + positions[i][3] + "\n";
+            }
+            return str;
+        }
+
+        internal bool isFirstMove()
+        {
+            return numberMoves==0 || numberMoves == 1;
+        }
+    }
 }
 

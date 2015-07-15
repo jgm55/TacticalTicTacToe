@@ -9,6 +9,9 @@ public class GameController : MonoBehaviour {
     public AudioSource piecePlaceSound;
     public enum BlockState { NUETRAL, O, X };
 
+    private const float UNDO_DELAY = 1f;
+    private float undoCounter = 0f;
+
 	public GUIStyle style;
 
 	public const int BOARD_SIZE = 4;
@@ -61,38 +64,58 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(SceneProperties.aiPlaying){
-			if(board.turn == Board.PlayerTurn.X_TURN && !moving){
-				//TODO update this to not always be x
-				Move move = AI.makeMove(board);
-                Debug.Log("Board");
-			    /*for(int i=0;i<BOARD_SIZE;i++){
-				    Debug.Log(board.positions[i][0]+" "+board.positions[i][1]+" "
-				              +board.positions[i][2]+" "+board.positions[i][3]);
-			    }//*/
-                //Debug.Log(move);
-				Vector2[] clicks = move.getClicks();
-				clickBlock(clicks[0]);
-				if(clicks.Length == 2) {
-					StartCoroutine(ClickAfterTime(1f, clicks[1]));
-				}
+		if(SceneProperties.aiPlaying && undoCounter > UNDO_DELAY){
+            if (board.turn == SceneProperties.aiTurn && !moving)
+            {
+                Move m = AI.makeMove(board);
+                Debug.Log("Move: " + m);
+                AnimationHelper.doMove(m);
+                this.move(m, true, true);
 			}
 		}
-
+        undoCounter += Time.deltaTime;
 		if(board.turn == Board.PlayerTurn.O_WINS || board.turn == Board.PlayerTurn.X_WINS){
 			if(Input.GetMouseButton(0) && doneCoooldown <= doneCounter){
 				Application.LoadLevel("TitleScreen");
 			}
 			doneCounter+=Time.deltaTime;
 		}
+
+        if(turnIndicator.GetComponent<Rotate>().turn != this.board.turn){
+            flipSign();
+        }
 	}
 
-   
-    public void undo()
+    public BlockState turnToBlockType()
     {
-        board = (Board)previousBoards[previousBoardsIndex];
+        switch (board.turn)
+        {
+            case Board.PlayerTurn.X_TURN:
+                return BlockState.X;
+            case Board.PlayerTurn.O_TURN:
+                return BlockState.O;
+            default:
+                throw new UnityException("Cannot change type "+board.turn+ " into a blockstate");
+        }
+    }
+
+    public Move undo()
+    {
+        if (previousBoardsIndex == 0)
+        {
+            throw new UnityException("Cannot undo more");
+        }
+        Board newerBoard = (Board)previousBoards[previousBoardsIndex];
         previousBoards.RemoveAt(previousBoardsIndex);
         previousBoardsIndex--;
+
+        Board oldBoard = (Board)previousBoards[previousBoardsIndex];
+        Move m = BoardHelper.getInstance().compareBoards(newerBoard, oldBoard);
+        //move(m, false);
+        board = oldBoard;
+        Debug.Log("Board after undo: \n" + board);
+        undoCounter = 0f;
+        return m;
     }
 
 	private void clickBlock(Vector2 click){
@@ -128,41 +151,61 @@ public class GameController : MonoBehaviour {
         return BlockState.NUETRAL;
     }
 
+    public void move(Move m, bool updateTurn, bool updateStack)
+    {
+        if (m.getPositionTwo().x != -1)
+        {
+            move((int)m.getPositionTwo().y, (int)m.getPositionTwo().x, (int)m.getPositionOne().y, (int)m.getPositionOne().x, updateTurn, updateStack);
+        }
+        else
+        {
+            move((int)m.getPositionOne().y, (int)m.getPositionOne().x, -1, -1, updateTurn, updateStack);
+        }
+    }
+
 	/*
 	 * Call from UI elements to perform a move on the board
 	 * */
-    public void move(int y, int x, int fromY, int fromX, bool updateTurn)
+    public void move(int y, int x, int fromY, int fromX, bool updateTurn, bool updateStack=true)
     {
-		if(board.turn != Board.PlayerTurn.O_WINS && board.turn != Board.PlayerTurn.X_WINS){
-			board = BoardHelper.getInstance().simulateMove(board, x, y, fromX, fromY);
+        Board newBoard = new Board(board);
+        if (newBoard.turn != Board.PlayerTurn.O_WINS && newBoard.turn != Board.PlayerTurn.X_WINS)
+        {
+            newBoard = BoardHelper.getInstance().simulateMove(newBoard, x, y, fromX, fromY);
 
-			int result = BoardHelper.getInstance().checkWin(x,y, board);
+			int result = BoardHelper.getInstance().checkWin(x,y, newBoard);
 			if(1 == result){
 				//O wins
-				board.turn = Board.PlayerTurn.O_WINS;
+                newBoard.turn = Board.PlayerTurn.O_WINS;
 			} else if(2 == result){
 				//x wins
-				board.turn = Board.PlayerTurn.X_WINS;
+                newBoard.turn = Board.PlayerTurn.X_WINS;
 			}
 
-/*			Debug.Log("Board");
-			for(int i=0;i<BOARD_SIZE;i++){
-				Debug.Log(board.positions[i][0]+" "+board.positions[i][1]+" "
-				          +board.positions[i][2]+" "+board.positions[i][3]);
-			}*/
+			Debug.Log("Board\n" + newBoard);
+			
 
 			if(updateTurn){
-                board.updateTurn();
+                newBoard.updateTurn();
 
-				//added to turn indicator
-				Rotate rotateTurn = turnIndicator.GetComponent<Rotate>();
-				rotateTurn.canRotate = true;
-                piecePlaceSound.Play();
 			}
-            previousBoards.Add(board);
-            previousBoardsIndex++;
+            if (updateStack)
+            {
+                previousBoards.Add(newBoard);
+                previousBoardsIndex++;
+            }
+            board = newBoard;
 		}
 	}
+
+    private void flipSign()
+    {
+        //added to turn indicator
+        Rotate rotateTurn = turnIndicator.GetComponent<Rotate>();
+        rotateTurn.canRotate = true;
+        rotateTurn.turn = board.turn;
+        piecePlaceSound.Play();
+    }
 
 	/**
 	 * Return an ArrayList of blockControllers of x,y coordinates where can move

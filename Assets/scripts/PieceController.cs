@@ -9,7 +9,11 @@ public class PieceController : MonoBehaviour {
 
     public enum PieceState { HELD,PLACED,RETURNING,START}
 
-    PieceState state = PieceState.START;
+    float rotationScalar = 10f;
+
+    float VELOCITY_FOR_WIND = 100f;
+
+    public PieceState state = PieceState.START;
 
     Vector3 startPos;
     Vector3 placePos = Vector3.zero;
@@ -20,14 +24,22 @@ public class PieceController : MonoBehaviour {
     float duration = .5f;
     Vector3 moveDist;
 
+    float velocityX = 0f;
+    Vector3 lastPosition;
+
 	// Use this for initialization
 	void Start () {
         startPos = this.transform.position;
         returnPlace = startPos;
+        lastPosition = this.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        Vector3 mousePos = Input.mousePosition;
+        if(SceneProperties.aiMoving){
+            mousePos = AnimationHelper.virtualMousePos;
+        }
         if (state == PieceState.RETURNING)
         {
             this.transform.position += Time.deltaTime* moveDist;
@@ -48,11 +60,29 @@ public class PieceController : MonoBehaviour {
         }
         if (state == PieceState.HELD)
         {
-            this.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            this.transform.position = Camera.main.ScreenToWorldPoint(mousePos);
             Vector3 pos = this.transform.position;
             this.transform.position = new Vector3(pos.x, pos.y, startPos.z);
+
+            //roation things
+            velocityX = (lastPosition.x - this.transform.position.x) / Time.deltaTime * rotationScalar;
+            
+            this.transform.rotation = Quaternion.RotateTowards(Quaternion.Euler(new Vector3(270, 0, 0)),
+                Quaternion.Euler(new Vector3(270, 60, 0)), Mathf.Clamp(velocityX, -20, 20));
+
+            AudioSource audioSource = GetComponent<AudioSource>();
+            if (Mathf.Abs(velocityX) >= VELOCITY_FOR_WIND)
+            {
+                audioSource.Play();
+            }
         }
-	}
+        else
+        {
+            this.transform.rotation = Quaternion.Euler(new Vector3(270, 0, 0));
+            GetComponent<AudioSource>().Stop();
+        }
+        lastPosition = this.transform.position;
+    }
 
     void OnMouseDown()
     {
@@ -81,12 +111,6 @@ public class PieceController : MonoBehaviour {
         }
     }
 
-    RaycastHit2D[] getRayCastFromScreen()
-    {
-        Vector2 camPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        return Physics2D.RaycastAll(camPos, Vector2.zero);
-    }
-
     void OnMouseUp()
     {
         Board.PlayerTurn turn = FindObjectOfType<GameController>().board.turn;
@@ -100,17 +124,22 @@ public class PieceController : MonoBehaviour {
 
             //TODO fix this for block controller
             bool onBoard = false;
-            RaycastHit2D[] hits = getRayCastFromScreen();
+
+            Vector3 mousePos = Input.mousePosition;
+            if (SceneProperties.aiMoving)
+            {
+                mousePos = AnimationHelper.virtualMousePos;
+            }
+
+            RaycastHit2D[] hits = AnimationHelper.getRayCastFromScreen(mousePos);
             foreach (RaycastHit2D hit in hits)
             {
-                Debug.Log(hit.collider.gameObject);
                 if (hit.collider.gameObject != this.gameObject)
                 {
                     BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
                     if (block != null && block.state == GameController.BlockState.NUETRAL)
                     {
                         BlockController.Action actionPerformed = block.clickSquare(fromBlock, false);
-                        Debug.Log("actionPerformed: " + actionPerformed);
                         if ((actionPerformed == BlockController.Action.PLACED && returnPlace == startPos)
                             || actionPerformed == BlockController.Action.MOVED && returnPlace == placePos)
                         {
@@ -138,10 +167,7 @@ public class PieceController : MonoBehaviour {
                 if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(fromBlock, false))
                 {
                     fromBlock.clickSquare(fromBlock, true);
-                    state = PieceState.RETURNING;
-                    returnPlace = startPos;
-                    placePos = Vector3.zero;
-                    fromBlock = null;
+                    returnToStart();
                 }
             }
 
@@ -149,5 +175,22 @@ public class PieceController : MonoBehaviour {
             moveDist = new Vector3((returnPlace.x - pos.x) / duration, (returnPlace.y - pos.y) / duration, 0);
             Debug.Log("ON MOUSE UP: " + state);
         }
+
+    }
+
+    public void returnToStart()
+    {
+        state = PieceState.RETURNING;
+        returnPlace = startPos;
+        placePos = Vector3.zero;
+        fromBlock = null;
+    }
+
+    public void goToBlock(BlockController block)
+    {
+        state = PieceState.RETURNING;
+        placePos = block.transform.position;
+        returnPlace = placePos;
+        fromBlock = block;
     }
 }

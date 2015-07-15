@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -30,6 +31,68 @@ namespace AssemblyCSharp
 			}
 			return instance;
 		}
+
+        public Move compareBoards(Board board, Board olderBoard)
+        {
+            List<Vector2> wrongSpots = new List<Vector2>();
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (board.positions[i][j] != olderBoard.positions[i][j])
+                    {
+                        Vector2 v = new Vector2(i, j);
+                        wrongSpots.Add(v);
+                        Debug.Log("Foudn difference at : " + i + " " + j);
+                    }
+                }
+            }
+
+
+            //Move is...
+            //removed if board is 0 and older is x or o and only 1
+            //placed if only 1 and alder was 0
+            //BUT I want to return the reverse of this, so logic swap now
+            if (wrongSpots.Count == 1)
+            {
+                int x = (int)wrongSpots[0].x;
+                int y = (int)wrongSpots[0].y;
+                if(board.getStateOfSquare(x,y) == GameController.BlockState.NUETRAL){
+                    Move move = new Move(x, y, MoveType.PLACE);
+                    return move;
+                } else if(olderBoard.getStateOfSquare(x,y) == GameController.BlockState.NUETRAL){
+                    Move move = new Move(x, y, MoveType.REMOVE);
+                    return move;
+                }
+                else
+                {
+                    throw new UnityException("Problem in comparing boards, 2 different non-Nuetral spaces");
+
+                }
+            }
+            else if (wrongSpots.Count == 2)
+            {
+                int x = (int)wrongSpots[0].x;
+                int y = (int)wrongSpots[0].y;
+                //Then there must be a move
+                //if new board is nuetral, then it was moved from here
+                if (board.getStateOfSquare(x, y) == GameController.BlockState.NUETRAL)
+                {
+                    Move move = new Move(wrongSpots[1],wrongSpots[0]);
+                    return move;
+                }//if older board was nuetral, it was moved to here
+                else if (olderBoard.getStateOfSquare(x, y) == GameController.BlockState.NUETRAL)
+                {
+                    Move move = new Move(wrongSpots[0], wrongSpots[1]);
+                    return move;
+                }
+                else
+                {
+                    throw new UnityException("Problem in comparing boards. 2 spots wrong, but no nuetral.");
+                }
+            }
+            throw new UnityException("Problem in comparing boards, they are not different");
+        }
 
 		/**
 	 	* Checks if the updated x/y coord leads to a win.

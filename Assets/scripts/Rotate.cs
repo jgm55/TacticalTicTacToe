@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class Rotate : MonoBehaviour {
 
 	public bool canRotate = false;
-
-	Vector3 target = new Vector3(0,0,0);
-
-	
+    public Board.PlayerTurn turn = Board.PlayerTurn.X_TURN;
 	// Update is called once per frame
 	void Update () {
 
