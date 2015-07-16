@@ -69,9 +69,10 @@ public class GameController : MonoBehaviour {
             if (board.turn == SceneProperties.aiTurn && !moving)
             {
                 Move m = AI.makeMove(board);
+
                 Debug.Log("Move: " + m);
                 AnimationHelper.doMove(m);
-                this.move(m, true, true);
+                this.move(m, true, true);                
 			}
 		}
         undoCounter += Time.deltaTime;
@@ -86,7 +87,8 @@ public class GameController : MonoBehaviour {
 			doneCounter+=Time.deltaTime;
 		}
 
-        if(turnIndicator.GetComponent<Rotate>().turn != this.board.turn){
+        if (turnIndicator.GetComponent<Rotate>().getTurn() != this.board.turn)
+        {
             flipSign();
         }
 	}
@@ -120,6 +122,8 @@ public class GameController : MonoBehaviour {
         board = oldBoard;
         Debug.Log("Board after undo: \n" + board);
         undoCounter = 0f;
+        piecePlaceSound.Play();
+
         return m;
     }
 
@@ -173,6 +177,7 @@ public class GameController : MonoBehaviour {
 	 * */
     public void move(int y, int x, int fromY, int fromX, bool updateTurn, bool updateStack=true)
     {
+        piecePlaceSound.Play();
         Board newBoard = new Board(board);
         if (newBoard.turn != Board.PlayerTurn.O_WINS && newBoard.turn != Board.PlayerTurn.X_WINS)
         {
@@ -207,9 +212,7 @@ public class GameController : MonoBehaviour {
     {
         //added to turn indicator
         Rotate rotateTurn = turnIndicator.GetComponent<Rotate>();
-        rotateTurn.canRotate = true;
-        rotateTurn.turn = board.turn;
-        piecePlaceSound.Play();
+        rotateTurn.setCanRotate();
     }
 
 	/**
