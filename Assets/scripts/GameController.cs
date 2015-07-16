@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour {
 	float doneCoooldown = 1;
 	float doneCounter = 0;
 	bool moving = false;
+	public GameObject x_winscreen;
+	public GameObject o_winscreen;
 
 	public Board board;
 
@@ -84,6 +86,12 @@ public class GameController : MonoBehaviour {
 			}
             //Add your jawn here, bro.
             //Then update doneCooldown to be the animation speed, probably
+			if(board.turn == Board.PlayerTurn.X_WINS){
+				x_winscreen.SetActive(true);
+			}
+			else if (board.turn == Board.PlayerTurn.O_WINS){
+				o_winscreen.SetActive(true);
+			}
 			doneCounter+=Time.deltaTime;
 		}
 
