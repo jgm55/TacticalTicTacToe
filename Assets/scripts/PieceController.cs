@@ -11,7 +11,8 @@ public class PieceController : MonoBehaviour {
 
     float rotationScalar = 10f;
 
-    float VELOCITY_FOR_WIND = 100f;
+    float VELOCITY_FOR_WIND = 150f;
+    float tiltAmount = 35f;
 
     public PieceState state = PieceState.START;
 
@@ -68,7 +69,7 @@ public class PieceController : MonoBehaviour {
             velocityX = (lastPosition.x - this.transform.position.x) / Time.deltaTime * rotationScalar;
             
             this.transform.rotation = Quaternion.RotateTowards(Quaternion.Euler(new Vector3(270, 0, 0)),
-                Quaternion.Euler(new Vector3(270, 60, 0)), Mathf.Clamp(velocityX, -20, 20));
+                Quaternion.Euler(new Vector3(270, 60, 0)), Mathf.Clamp(velocityX, -tiltAmount, tiltAmount));
 
             AudioSource audioSource = GetComponent<AudioSource>();
             if (Mathf.Abs(velocityX) >= VELOCITY_FOR_WIND)
