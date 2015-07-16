@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using AssemblyCSharp;
+using System.Collections.Generic;
 
 public class AnimationHelper : MonoBehaviour {
 
@@ -80,5 +81,30 @@ public class AnimationHelper : MonoBehaviour {
     {
         Vector2 camPos = Camera.main.ScreenToWorldPoint(pos);
         return Physics2D.RaycastAll(camPos, Vector2.zero);
+    }
+
+    public static void highlightPlaces(List<Vector2> list)
+    {
+        foreach (Vector2 v in list)
+        {
+            highlight((int)v.x, (int)v.y);
+        }
+    }
+
+    public static void highlight(int x, int y)
+    {
+        foreach (BlockController block in FindObjectsOfType<BlockController>())
+        {
+            if (block.x == y && block.y == x)
+            {
+                //DO the highlighting on Block
+                //block.highlight()
+            }
+        }
+    }
+
+    public static void turnOffHighlight()
+    {
+        //revers the above
     }
 }

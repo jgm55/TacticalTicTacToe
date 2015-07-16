@@ -106,28 +106,37 @@ namespace AssemblyCSharp
 	 	* Checks if the updated x/y coord leads to a win.
 	 	* Returns 1 for O winning, 2 for X winning, 0 otherwise;
 	 	* */
-		public int checkWin(int x, int y, Board givenBoard){
-			int piece = givenBoard.positions[x][y];
+        public int checkWin(int x, int y, Board givenBoard)
+        {
+            Vector2 winLoc1 = getWin(x, y, givenBoard)[0];
+            return givenBoard.positions[(int)winLoc1.x][(int)winLoc1.y];
+        }
+        public List<Vector2> getWin(int x, int y, Board givenBoard)
+        {
+            int piece = givenBoard.positions[x][y];
 			if( piece == 0){
-				return 0;
+                return new List<Vector2> {new Vector2(0,0)};
 			}
-			
+            List<Vector2> toReturn = new List<Vector2>(4);
 			//check horizontal
 			bool same = true;
 			for(int i=0;i<BOARD_SIZE;i++){
 				same = (piece==givenBoard.positions[i][y]) && same;
+                toReturn.Add(new Vector2(i,y));
 			}
 			if (same) {
-				return givenBoard.positions[x][y];
+				return toReturn;
 			}
 			
 			//check Vertical
+            toReturn = new List<Vector2>(4);
 			same = true;
 			for(int i=0;i<BOARD_SIZE;i++){
 				same = (piece==givenBoard.positions[x][i]) && same;
+                toReturn.Add(new Vector2(x, i));
 			}
 			if (same) {
-				return piece;
+                return toReturn;
 			}
 			
 			same = true;
@@ -135,7 +144,7 @@ namespace AssemblyCSharp
 			same = (piece == givenBoard.positions[0][0] && piece == givenBoard.positions[BOARD_SIZE-1][0] 
 			        && piece == givenBoard.positions[0][BOARD_SIZE-1] && piece == givenBoard.positions[BOARD_SIZE-1][BOARD_SIZE-1]);
 			if (same) {
-				return piece;
+                return new List<Vector2> { new Vector2(0,0), new Vector2(BOARD_SIZE - 1,0), new Vector2(0, BOARD_SIZE - 1), new Vector2(BOARD_SIZE - 1, BOARD_SIZE - 1) };
 			}
 			
 			//check diagonals
@@ -143,13 +152,14 @@ namespace AssemblyCSharp
 			same = (piece == givenBoard.positions[0][0] && piece == givenBoard.positions[3][3] 
 			        && piece == givenBoard.positions[1][1] && piece == givenBoard.positions[2][2]);
 			if (same) {
-				return piece;
+                return new List<Vector2> { new Vector2(0, 0), new Vector2(1, 1), new Vector2(2, 2), new Vector2(3, 3) };
+
 			}
 			same = true;
 			same = (piece == givenBoard.positions[0][3] && piece == givenBoard.positions[1][2] 
 			        && piece == givenBoard.positions[2][1] && piece == givenBoard.positions[3][0]);
 			if (same) {
-				return piece;
+                return new List<Vector2> { new Vector2(0, 3), new Vector2(1, 2), new Vector2(2, 1), new Vector2(3, 0) };
 			}
 			
 			if(x-1 >= 0){
@@ -157,13 +167,13 @@ namespace AssemblyCSharp
 				if(y-1 >= 0){
 					if(piece == givenBoard.positions[x-1][y] && piece == givenBoard.positions[x-1][y-1] 
 					   && piece == givenBoard.positions[x][y-1]){
-						return piece;
+                           return new List<Vector2> { new Vector2(x-1, y), new Vector2(x-1, y-1), new Vector2(x, y-1), new Vector2(x, y) };
 					}
 				} 
 				if(y+1 < BOARD_SIZE){//check down left square
 					if(piece == givenBoard.positions[x-1][y] && piece == givenBoard.positions[x-1][y+1] 
 					   && piece == givenBoard.positions[x][y+1]){
-						return piece;
+                           return new List<Vector2> { new Vector2(x - 1, y), new Vector2(x - 1, y + 1), new Vector2(x, y + 1), new Vector2(x, y) };
 					}
 				}
 			} 
@@ -172,19 +182,19 @@ namespace AssemblyCSharp
 				if(y-1 >= 0){
 					if(piece == givenBoard.positions[x+1][y] && piece == givenBoard.positions[x+1][y-1] 
 					   && piece == givenBoard.positions[x][y-1]){
-						return piece;
+                           return new List<Vector2> { new Vector2(x + 1, y), new Vector2(x + 1, y - 1), new Vector2(x, y - 1), new Vector2(x, y) }; ;
 					}
 				} 
 				if(y+1 < BOARD_SIZE){//check down right square
 					if(piece == givenBoard.positions[x+1][y] && piece == givenBoard.positions[x+1][y+1] 
 					   && piece == givenBoard.positions[x][y+1]){
-						return piece;
+                           return new List<Vector2> { new Vector2(x + 1, y), new Vector2(x + 1, y + 1), new Vector2(x, y + 1), new Vector2(x, y) }; ;
 					}
 				}
 			}
 
-			return 0;
-		}
+            return new List<Vector2> { new Vector2(0, 0) };
+        }
 		/**
 		* 
 	 	* Return an ArrayList of Vector2 of x,y coordinates where can move

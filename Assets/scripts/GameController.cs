@@ -189,6 +189,7 @@ public class GameController : MonoBehaviour {
 			if(1 == result){
 				//O wins
                 newBoard.turn = Board.PlayerTurn.O_WINS;
+                AnimationHelper.highlightPlaces(BoardHelper.getInstance().getWin(x, y, newBoard));
 			} else if(2 == result){
 				//x wins
                 newBoard.turn = Board.PlayerTurn.X_WINS;
