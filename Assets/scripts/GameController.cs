@@ -122,7 +122,8 @@ public class GameController : MonoBehaviour {
         board = oldBoard;
         Debug.Log("Board after undo: \n" + board);
         undoCounter = 0f;
-        piecePlaceSound.Play();
+        if (!piecePlaceSound.isPlaying)
+            piecePlaceSound.Play();
 
         return m;
     }
@@ -177,7 +178,8 @@ public class GameController : MonoBehaviour {
 	 * */
     public void move(int y, int x, int fromY, int fromX, bool updateTurn, bool updateStack=true)
     {
-        piecePlaceSound.Play();
+        if(!piecePlaceSound.isPlaying)
+            piecePlaceSound.Play();
         Board newBoard = new Board(board);
         if (newBoard.turn != Board.PlayerTurn.O_WINS && newBoard.turn != Board.PlayerTurn.X_WINS)
         {
