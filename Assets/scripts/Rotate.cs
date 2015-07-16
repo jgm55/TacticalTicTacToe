@@ -21,10 +21,10 @@ public class Rotate : MonoBehaviour {
     {
         return canRotate;
     }
-    public void setCanRotate()
+    public void setCanRotate(bool soundOn=true)
     {
         if(counter > TIME_ROTATE+.1f){
-            if (clip != null)
+            if (clip != null && soundOn)
             {
                 AudioSource.PlayClipAtPoint(clip, Vector3.zero);
             }
