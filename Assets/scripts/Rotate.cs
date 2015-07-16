@@ -8,6 +8,9 @@ public class Rotate : MonoBehaviour {
     private Board.PlayerTurn turn = Board.PlayerTurn.X_TURN;
     float counter = 0f;
     float TIME_ROTATE = .5f;
+
+    public AudioClip clip;
+
 	// Update is called once per frame
 	void Update () {
         counter += Time.deltaTime;
@@ -21,6 +24,10 @@ public class Rotate : MonoBehaviour {
     public void setCanRotate()
     {
         if(counter > TIME_ROTATE+.1f){
+            if (clip != null)
+            {
+                AudioSource.PlayClipAtPoint(clip, Vector3.zero);
+            }
             //Debug.Log ("Change of Turn!");
             iTween.RotateAdd(gameObject, new Vector3(180, 0, 0), TIME_ROTATE);
             if (turn == Board.PlayerTurn.X_TURN)

@@ -4,21 +4,27 @@ using System.Collections;
 public class OnePlayerButtonController : MonoBehaviour {
 
 	public string onePlayerGameScene = "MainGame";
+    float counter = 0f;
+    bool flipping = false;
 
+    // Update is called once per frame
+    void Update()
+    {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        if (flipping && counter > .25f)
+        {
+            Application.LoadLevel(onePlayerGameScene);
+        }
+        counter += Time.deltaTime;
+    }
 
-	void OnMouseDown(){
-		Debug.Log("Clicked One Player Start");
-		SceneProperties.aiPlaying = true;
-		Application.LoadLevel(onePlayerGameScene);
-	}
+    void OnMouseDown()
+    {
+        //TODO load tutorial page
+        this.GetComponentInParent<Rotate>().setCanRotate();
+        flipping = true;
+        counter = 0f;
+        Debug.Log("Clicked One Player Start");
+        SceneProperties.aiPlaying = true;
+    }
 }

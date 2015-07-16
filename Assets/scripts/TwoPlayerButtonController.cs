@@ -2,22 +2,28 @@
 using System.Collections;
 
 public class TwoPlayerButtonController : MonoBehaviour {
+    public string twoPlayerGameScene = "MainGame";
+    float counter = 0f;
+    bool flipping = false;
 
-	public string twoPlayerGameScene = "MainGame";
+    // Update is called once per frame
+    void Update()
+    {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        if (flipping && counter > .25f)
+        {
+            Application.LoadLevel(twoPlayerGameScene);
+        }
+        counter += Time.deltaTime;
+    }
 
-	void OnMouseDown(){
+    void OnMouseDown()
+    {
+        //TODO load tutorial page
+        this.GetComponentInParent<Rotate>().setCanRotate();
+        flipping = true;
+        counter = 0f;
 		Debug.Log("Clicked 2 player start");
 		SceneProperties.aiPlaying = false;
-		Application.LoadLevel(twoPlayerGameScene);
 	}
 }

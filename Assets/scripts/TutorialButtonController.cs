@@ -3,19 +3,23 @@ using System.Collections;
 
 public class TutorialButtonController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+    float counter = 0f;
+    bool flipping = false;
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+        if(flipping && counter > .25f){
+            Application.LoadLevel("Tutorial");
+        }
+        counter += Time.deltaTime;
 	}
 
 	void OnMouseDown(){
 		//TODO load tutorial page
 		Debug.Log("Clicked tutorial");
-        Application.LoadLevel("Tutorial");
+        this.GetComponentInParent<Rotate>().setCanRotate();
+        flipping = true;
+        counter = 0f;
 	}
 }
