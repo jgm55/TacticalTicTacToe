@@ -109,13 +109,17 @@ namespace AssemblyCSharp
         public int checkWin(int x, int y, Board givenBoard)
         {
             Vector2 winLoc1 = getWin(x, y, givenBoard)[0];
-            return givenBoard.positions[(int)winLoc1.x][(int)winLoc1.y];
+            if (winLoc1.x == -1)
+            {
+                return 0;
+            }
+            return givenBoard.positions[x][y];
         }
         public List<Vector2> getWin(int x, int y, Board givenBoard)
         {
             int piece = givenBoard.positions[x][y];
 			if( piece == 0){
-                return new List<Vector2> {new Vector2(0,0)};
+                return new List<Vector2> {new Vector2(-1,-1)};
 			}
             List<Vector2> toReturn = new List<Vector2>(4);
 			//check horizontal
@@ -193,7 +197,7 @@ namespace AssemblyCSharp
 				}
 			}
 
-            return new List<Vector2> { new Vector2(0, 0) };
+            return new List<Vector2> { new Vector2(-1, -1) };
         }
 		/**
 		* 
