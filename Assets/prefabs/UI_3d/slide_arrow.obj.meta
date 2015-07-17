@@ -1,50 +1,17 @@
 fileFormatVersion: 2
-guid: 1f52d3fc04195d34f851c81ac773fda2
-timeCreated: 1436502976
+guid: 50bd3140822bb4d4cb44c26369f62a2b
+timeCreated: 1437104932
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: Default1
-    100002: group2
-    100004: playerTurnIndicator:Default
-    100006: slide_02_background
-    100008: slide_02_border
-    100010: slide_02_text
-    100012: slide_02_text_background
-    100014: slide_02_text_border
-    100016: //RootNode
-    100018: polySurface323
-    400000: Default1
-    400002: group2
-    400004: playerTurnIndicator:Default
-    400006: slide_02_background
-    400008: slide_02_border
-    400010: slide_02_text
-    400012: slide_02_text_background
-    400014: slide_02_text_border
-    400016: //RootNode
-    400018: polySurface323
-    2300000: slide_02_background
-    2300002: slide_02_border
-    2300004: slide_02_text
-    2300006: slide_02_text_background
-    2300008: slide_02_text_border
-    2300010: polySurface323
-    3300000: slide_02_background
-    3300002: slide_02_border
-    3300004: slide_02_text
-    3300006: slide_02_text_background
-    3300008: slide_02_text_border
-    3300010: polySurface323
-    4300000: slide_02_border
-    4300002: slide_02_background
-    4300004: slide_02_text_border
-    4300006: slide_02_text_background
-    4300008: slide_02_text
-    4300010: polySurface323
-    7400000: Take 001
-    9500000: //RootNode
+    100000: planarTrimmedSurface1
+    100002: //RootNode
+    400000: planarTrimmedSurface1
+    400002: //RootNode
+    2300000: planarTrimmedSurface1
+    3300000: planarTrimmedSurface1
+    4300000: planarTrimmedSurface1
   materials:
     importMaterials: 1
     materialName: 0
@@ -68,7 +35,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 6
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
@@ -102,7 +69,7 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

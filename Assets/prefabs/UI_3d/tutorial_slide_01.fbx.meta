@@ -13,6 +13,7 @@ ModelImporter:
     100010: slide_01_textBackground
     100012: slide_01_textBorder
     100014: //RootNode
+    100016: polySurface1
     400000: Default2
     400002: group1
     400004: slide_01_background
@@ -21,21 +22,25 @@ ModelImporter:
     400010: slide_01_textBackground
     400012: slide_01_textBorder
     400014: //RootNode
+    400016: polySurface1
     2300000: slide_01_background
     2300002: slide_01_border
     2300004: slide_01_text
     2300006: slide_01_textBackground
     2300008: slide_01_textBorder
+    2300010: polySurface1
     3300000: slide_01_background
     3300002: slide_01_border
     3300004: slide_01_text
     3300006: slide_01_textBackground
     3300008: slide_01_textBorder
+    3300010: polySurface1
     4300000: slide_01_border
     4300002: slide_01_background
     4300004: slide_01_textBackground
     4300006: slide_01_textBorder
     4300008: slide_01_text
+    4300010: polySurface1
     7400000: Take 001
     9500000: //RootNode
   materials:
