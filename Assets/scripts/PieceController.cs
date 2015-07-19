@@ -38,9 +38,6 @@ public class PieceController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Vector3 mousePos = Input.mousePosition;
-        if(SceneProperties.aiMoving){
-            mousePos = AnimationHelper.virtualMousePos;
-        }
         if (state == PieceState.RETURNING)
         {
             this.transform.position += Time.deltaTime* moveDist;
@@ -91,92 +88,81 @@ public class PieceController : MonoBehaviour {
         if ((blockType == GameController.BlockState.X && turn == Board.PlayerTurn.X_TURN) ||
             (blockType == GameController.BlockState.O && turn == Board.PlayerTurn.O_TURN))
         {
-            SceneProperties.heldPiece = true;
-            state = PieceState.HELD;
-            if(state == PieceState.PLACED){
-                /*RaycastHit2D[] hits = getRayCastFromScreen();
-                foreach (RaycastHit2D hit in hits)
-                {
-                    if (hit.collider.gameObject != this.gameObject)
-                    {
-                        BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
-                        if (block != null)
-                        {
-                            //block.clickSquare(blockType);
-                            block.highlightSquare(blockType);
-                        }
-                    }
-                }*/
+            if (!SceneProperties.aiPlaying || 
+                (SceneProperties.aiPlaying && SceneProperties.aiTurn != FindObjectOfType<GameController>().board.turn))
+            {
+
+                SceneProperties.heldPiece = true;
+                state = PieceState.HELD;
+                Debug.Log("ON MOUSE DOWN: " + state);
             }
-            Debug.Log("ON MOUSE DOWN: " + state);
         }
     }
 
     void OnMouseUp()
     {
-        Board.PlayerTurn turn = FindObjectOfType<GameController>().board.turn;
+        GameController gameController = FindObjectOfType<GameController>();
+        Board.PlayerTurn turn = gameController.board.turn;
 
         if ((blockType == GameController.BlockState.X && turn == Board.PlayerTurn.X_TURN) ||
             (blockType == GameController.BlockState.O && turn == Board.PlayerTurn.O_TURN))
-        {
-            //find if block is hit:
-            SceneProperties.heldPiece = false;
-            state = PieceState.RETURNING;
+        { 
+            if(!SceneProperties.aiPlaying || (SceneProperties.aiPlaying && SceneProperties.aiTurn != gameController.board.turn)){
+                //find if block is hit:
+                SceneProperties.heldPiece = false;
+                state = PieceState.RETURNING;
 
-            //TODO fix this for block controller
-            bool onBoard = false;
+                //TODO fix this for block controller
+                bool onBoard = false;
 
-            Vector3 mousePos = Input.mousePosition;
-            if (SceneProperties.aiMoving)
-            {
-                mousePos = AnimationHelper.virtualMousePos;
-            }
+                Vector3 mousePos = Input.mousePosition;
 
-            RaycastHit2D[] hits = AnimationHelper.getRayCastFromScreen(mousePos);
-            foreach (RaycastHit2D hit in hits)
-            {
-                if (hit.collider.gameObject != this.gameObject)
+                RaycastHit2D[] hits = AnimationHelper.getRayCastFromScreen(mousePos);
+                foreach (RaycastHit2D hit in hits)
                 {
-                    BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
-                    if (block != null && block.state == GameController.BlockState.NUETRAL)
+                    if (hit.collider.gameObject != this.gameObject)
                     {
-                        BlockController.Action actionPerformed = block.clickSquare(fromBlock, false);
-                        if ((actionPerformed == BlockController.Action.PLACED && returnPlace == startPos)
-                            || actionPerformed == BlockController.Action.MOVED && returnPlace == placePos)
+                        BlockController block = hit.collider.gameObject.GetComponent<BlockController>();
+                        if (block != null && block.state == GameController.BlockState.NUETRAL)
                         {
-                            block.clickSquare(fromBlock, true);
-                            this.transform.position = block.transform.position;
-                            state = PieceState.PLACED;
-                            placePos = transform.position;
-                            returnPlace = placePos;
-                            fromBlock = block;
+                            BlockController.Action actionPerformed = block.clickSquare(fromBlock, false);
+                            if ((actionPerformed == BlockController.Action.PLACED && returnPlace == startPos)
+                                || actionPerformed == BlockController.Action.MOVED && returnPlace == placePos)
+                            {
+                                block.clickSquare(fromBlock, true);
+                                this.transform.position = block.transform.position;
+                                state = PieceState.PLACED;
+                                placePos = transform.position;
+                                returnPlace = placePos;
+                                fromBlock = block;
+                            }
+                            else
+                            {
+                                //FindObjectOfType<GameController>().undo();
+                            }
                         }
-                        else
+                        else if (hit.collider.gameObject.tag == "Board")
                         {
-                            //FindObjectOfType<GameController>().undo();
+                            onBoard = true;
                         }
                     }
-                    else if (hit.collider.gameObject.tag == "Board")
+                }
+                //if not placed and picked up happens, then add back to pile.
+                if (state != PieceState.PLACED && onBoard == false)
+                {
+                    if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(fromBlock, false))
                     {
-                        onBoard = true;
+                        fromBlock.clickSquare(fromBlock, true);
+                        returnToStart();
                     }
                 }
-            }
-            //if not placed and picked up happens, then add back to pile.
-            if (state != PieceState.PLACED && onBoard == false)
-            {
-                if (fromBlock != null && BlockController.Action.PICKED_UP == fromBlock.clickSquare(fromBlock, false))
-                {
-                    fromBlock.clickSquare(fromBlock, true);
-                    returnToStart();
-                }
-            }
 
-            Vector3 pos = transform.position;
-            moveDist = new Vector3((returnPlace.x - pos.x) / duration, (returnPlace.y - pos.y) / duration, 0);
-            Debug.Log("ON MOUSE UP: " + state);
+                Vector3 pos = transform.position;
+                moveDist = new Vector3((returnPlace.x - pos.x) / duration, (returnPlace.y - pos.y) / duration, 0);
+                Debug.Log("ON MOUSE UP: " + state);
+            }
+            
         }
-
     }
 
     public void returnToStart()
