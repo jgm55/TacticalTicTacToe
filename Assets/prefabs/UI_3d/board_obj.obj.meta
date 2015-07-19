@@ -17,6 +17,17 @@ ModelImporter:
     100018: new_board_02:Default_crossbeam_08
     100020: new_board_02:Default_crossbeam_09
     100022: new_board_02:Default_polySurface283
+    100024: board_obj:board_board_obj:polySurface1
+    100026: board_obj:Default_board_obj:crossbeam_01_board_obj:polySurface1
+    100028: board_obj:Default_board_obj:crossbeam_02_board_obj:polySurface1
+    100030: board_obj:Default_board_obj:crossbeam_03_board_obj:polySurface1
+    100032: board_obj:Default_board_obj:crossbeam_04_board_obj:polySurface1
+    100034: board_obj:Default_board_obj:crossbeam_05_board_obj:polySurface1
+    100036: board_obj:Default_board_obj:crossbeam_06_board_obj:polySurface1
+    100038: board_obj:Default_board_obj:crossbeam_07_board_obj:polySurface1
+    100040: board_obj:Default_board_obj:crossbeam_08_board_obj:polySurface1
+    100042: board_obj:Default_board_obj:crossbeam_09_board_obj:polySurface1
+    100044: board_obj:Default_board_obj:polySurface283_board_obj:polySurface1
     400000: //RootNode
     400002: board
     400004: crossbeam_01_new_board_02:Default
@@ -29,6 +40,17 @@ ModelImporter:
     400018: new_board_02:Default_crossbeam_08
     400020: new_board_02:Default_crossbeam_09
     400022: new_board_02:Default_polySurface283
+    400024: board_obj:board_board_obj:polySurface1
+    400026: board_obj:Default_board_obj:crossbeam_01_board_obj:polySurface1
+    400028: board_obj:Default_board_obj:crossbeam_02_board_obj:polySurface1
+    400030: board_obj:Default_board_obj:crossbeam_03_board_obj:polySurface1
+    400032: board_obj:Default_board_obj:crossbeam_04_board_obj:polySurface1
+    400034: board_obj:Default_board_obj:crossbeam_05_board_obj:polySurface1
+    400036: board_obj:Default_board_obj:crossbeam_06_board_obj:polySurface1
+    400038: board_obj:Default_board_obj:crossbeam_07_board_obj:polySurface1
+    400040: board_obj:Default_board_obj:crossbeam_08_board_obj:polySurface1
+    400042: board_obj:Default_board_obj:crossbeam_09_board_obj:polySurface1
+    400044: board_obj:Default_board_obj:polySurface283_board_obj:polySurface1
     2300000: board
     2300002: crossbeam_01_new_board_02:Default
     2300004: new_board_02:Default_crossbeam_02
@@ -40,6 +62,17 @@ ModelImporter:
     2300016: new_board_02:Default_crossbeam_08
     2300018: new_board_02:Default_crossbeam_09
     2300020: new_board_02:Default_polySurface283
+    2300022: board_obj:board_board_obj:polySurface1
+    2300024: board_obj:Default_board_obj:crossbeam_01_board_obj:polySurface1
+    2300026: board_obj:Default_board_obj:crossbeam_02_board_obj:polySurface1
+    2300028: board_obj:Default_board_obj:crossbeam_03_board_obj:polySurface1
+    2300030: board_obj:Default_board_obj:crossbeam_04_board_obj:polySurface1
+    2300032: board_obj:Default_board_obj:crossbeam_05_board_obj:polySurface1
+    2300034: board_obj:Default_board_obj:crossbeam_06_board_obj:polySurface1
+    2300036: board_obj:Default_board_obj:crossbeam_07_board_obj:polySurface1
+    2300038: board_obj:Default_board_obj:crossbeam_08_board_obj:polySurface1
+    2300040: board_obj:Default_board_obj:crossbeam_09_board_obj:polySurface1
+    2300042: board_obj:Default_board_obj:polySurface283_board_obj:polySurface1
     3300000: board
     3300002: crossbeam_01_new_board_02:Default
     3300004: new_board_02:Default_crossbeam_02
@@ -51,6 +84,17 @@ ModelImporter:
     3300016: new_board_02:Default_crossbeam_08
     3300018: new_board_02:Default_crossbeam_09
     3300020: new_board_02:Default_polySurface283
+    3300022: board_obj:board_board_obj:polySurface1
+    3300024: board_obj:Default_board_obj:crossbeam_01_board_obj:polySurface1
+    3300026: board_obj:Default_board_obj:crossbeam_02_board_obj:polySurface1
+    3300028: board_obj:Default_board_obj:crossbeam_03_board_obj:polySurface1
+    3300030: board_obj:Default_board_obj:crossbeam_04_board_obj:polySurface1
+    3300032: board_obj:Default_board_obj:crossbeam_05_board_obj:polySurface1
+    3300034: board_obj:Default_board_obj:crossbeam_06_board_obj:polySurface1
+    3300036: board_obj:Default_board_obj:crossbeam_07_board_obj:polySurface1
+    3300038: board_obj:Default_board_obj:crossbeam_08_board_obj:polySurface1
+    3300040: board_obj:Default_board_obj:crossbeam_09_board_obj:polySurface1
+    3300042: board_obj:Default_board_obj:polySurface283_board_obj:polySurface1
     4300000: board
     4300002: crossbeam_01_new_board_02:Default
     4300004: new_board_02:Default_crossbeam_02
@@ -62,6 +106,17 @@ ModelImporter:
     4300016: new_board_02:Default_crossbeam_08
     4300018: new_board_02:Default_crossbeam_09
     4300020: new_board_02:Default_polySurface283
+    4300022: board_obj:board_board_obj:polySurface1
+    4300024: board_obj:Default_board_obj:crossbeam_01_board_obj:polySurface1
+    4300026: board_obj:Default_board_obj:crossbeam_02_board_obj:polySurface1
+    4300028: board_obj:Default_board_obj:crossbeam_03_board_obj:polySurface1
+    4300030: board_obj:Default_board_obj:crossbeam_04_board_obj:polySurface1
+    4300032: board_obj:Default_board_obj:crossbeam_05_board_obj:polySurface1
+    4300034: board_obj:Default_board_obj:crossbeam_06_board_obj:polySurface1
+    4300036: board_obj:Default_board_obj:crossbeam_07_board_obj:polySurface1
+    4300038: board_obj:Default_board_obj:crossbeam_08_board_obj:polySurface1
+    4300040: board_obj:Default_board_obj:crossbeam_09_board_obj:polySurface1
+    4300042: board_obj:Default_board_obj:polySurface283_board_obj:polySurface1
   materials:
     importMaterials: 1
     materialName: 0
