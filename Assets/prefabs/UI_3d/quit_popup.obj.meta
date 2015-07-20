@@ -1,0 +1,171 @@
+fileFormatVersion: 2
+guid: 69b8742e98dbcee419d26e4150171da5
+timeCreated: 1437422216
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: _X_:planarTrimmedSurface1
+    100002: planarTrimmedSurface1_polySurface52
+    100004: planarTrimmedSurface2
+    100006: polySurface31_planarTrimmedSurface1
+    100008: polySurface53
+    100010: //RootNode
+    100012: turn_indicator:background_polySurface1_turn_indicator:polySurface1
+    100014: turn_indicator:background_turn_indicator:polySurface1_polySurface55
+    100016: turn_indicator:background_turn_indicator:polySurface1_polySurface58
+    100018: turn_indicator:o_face_turn_indicator:polySurface1_polySurface10
+    100020: turn_indicator:o_face_turn_indicator:polySurface1_polySurface54
+    100022: turn_indicator:o_face_turn_indicator:polySurface1_polySurface57
+    100024: turn_indicator:o_player_turn_indicator:polySurface1_polySurface20
+    100026: turn_indicator:o_player_turn_indicator:polySurface1_polySurface27
+    100028: turn_indicator:x_face_turn_indicator:polySurface1_polySurface11
+    100030: turn_indicator:x_face_turn_indicator:polySurface1_polySurface56
+    100032: turn_indicator:x_face_turn_indicator:polySurface1_polySurface59
+    100034: turn_indicator:x_player_turn_indicator:polySurface1_polySurface12
+    100036: turn_indicator:x_player_turn_indicator:polySurface1_polySurface19
+    100038: undo_button:Default_undo_button:polySurface21_undo_button:polySurface29_polySurface29_undo_button:polySurface1
+    100040: undo_button:Default_undo_button:polySurface21_undo_button:polySurface30_undo_button:polySurface1_polySurface30
+    400000: _X_:planarTrimmedSurface1
+    400002: planarTrimmedSurface1_polySurface52
+    400004: planarTrimmedSurface2
+    400006: polySurface31_planarTrimmedSurface1
+    400008: polySurface53
+    400010: //RootNode
+    400012: turn_indicator:background_polySurface1_turn_indicator:polySurface1
+    400014: turn_indicator:background_turn_indicator:polySurface1_polySurface55
+    400016: turn_indicator:background_turn_indicator:polySurface1_polySurface58
+    400018: turn_indicator:o_face_turn_indicator:polySurface1_polySurface10
+    400020: turn_indicator:o_face_turn_indicator:polySurface1_polySurface54
+    400022: turn_indicator:o_face_turn_indicator:polySurface1_polySurface57
+    400024: turn_indicator:o_player_turn_indicator:polySurface1_polySurface20
+    400026: turn_indicator:o_player_turn_indicator:polySurface1_polySurface27
+    400028: turn_indicator:x_face_turn_indicator:polySurface1_polySurface11
+    400030: turn_indicator:x_face_turn_indicator:polySurface1_polySurface56
+    400032: turn_indicator:x_face_turn_indicator:polySurface1_polySurface59
+    400034: turn_indicator:x_player_turn_indicator:polySurface1_polySurface12
+    400036: turn_indicator:x_player_turn_indicator:polySurface1_polySurface19
+    400038: undo_button:Default_undo_button:polySurface21_undo_button:polySurface29_polySurface29_undo_button:polySurface1
+    400040: undo_button:Default_undo_button:polySurface21_undo_button:polySurface30_undo_button:polySurface1_polySurface30
+    2300000: _X_:planarTrimmedSurface1
+    2300002: planarTrimmedSurface1_polySurface52
+    2300004: planarTrimmedSurface2
+    2300006: polySurface31_planarTrimmedSurface1
+    2300008: polySurface53
+    2300010: turn_indicator:background_polySurface1_turn_indicator:polySurface1
+    2300012: turn_indicator:background_turn_indicator:polySurface1_polySurface55
+    2300014: turn_indicator:background_turn_indicator:polySurface1_polySurface58
+    2300016: turn_indicator:o_face_turn_indicator:polySurface1_polySurface10
+    2300018: turn_indicator:o_face_turn_indicator:polySurface1_polySurface54
+    2300020: turn_indicator:o_face_turn_indicator:polySurface1_polySurface57
+    2300022: turn_indicator:o_player_turn_indicator:polySurface1_polySurface20
+    2300024: turn_indicator:o_player_turn_indicator:polySurface1_polySurface27
+    2300026: turn_indicator:x_face_turn_indicator:polySurface1_polySurface11
+    2300028: turn_indicator:x_face_turn_indicator:polySurface1_polySurface56
+    2300030: turn_indicator:x_face_turn_indicator:polySurface1_polySurface59
+    2300032: turn_indicator:x_player_turn_indicator:polySurface1_polySurface12
+    2300034: turn_indicator:x_player_turn_indicator:polySurface1_polySurface19
+    2300036: undo_button:Default_undo_button:polySurface21_undo_button:polySurface29_polySurface29_undo_button:polySurface1
+    2300038: undo_button:Default_undo_button:polySurface21_undo_button:polySurface30_undo_button:polySurface1_polySurface30
+    3300000: _X_:planarTrimmedSurface1
+    3300002: planarTrimmedSurface1_polySurface52
+    3300004: planarTrimmedSurface2
+    3300006: polySurface31_planarTrimmedSurface1
+    3300008: polySurface53
+    3300010: turn_indicator:background_polySurface1_turn_indicator:polySurface1
+    3300012: turn_indicator:background_turn_indicator:polySurface1_polySurface55
+    3300014: turn_indicator:background_turn_indicator:polySurface1_polySurface58
+    3300016: turn_indicator:o_face_turn_indicator:polySurface1_polySurface10
+    3300018: turn_indicator:o_face_turn_indicator:polySurface1_polySurface54
+    3300020: turn_indicator:o_face_turn_indicator:polySurface1_polySurface57
+    3300022: turn_indicator:o_player_turn_indicator:polySurface1_polySurface20
+    3300024: turn_indicator:o_player_turn_indicator:polySurface1_polySurface27
+    3300026: turn_indicator:x_face_turn_indicator:polySurface1_polySurface11
+    3300028: turn_indicator:x_face_turn_indicator:polySurface1_polySurface56
+    3300030: turn_indicator:x_face_turn_indicator:polySurface1_polySurface59
+    3300032: turn_indicator:x_player_turn_indicator:polySurface1_polySurface12
+    3300034: turn_indicator:x_player_turn_indicator:polySurface1_polySurface19
+    3300036: undo_button:Default_undo_button:polySurface21_undo_button:polySurface29_polySurface29_undo_button:polySurface1
+    3300038: undo_button:Default_undo_button:polySurface21_undo_button:polySurface30_undo_button:polySurface1_polySurface30
+    4300000: _X_:planarTrimmedSurface1
+    4300002: planarTrimmedSurface1_polySurface52
+    4300004: planarTrimmedSurface2
+    4300006: polySurface31_planarTrimmedSurface1
+    4300008: polySurface53
+    4300010: turn_indicator:background_polySurface1_turn_indicator:polySurface1
+    4300012: turn_indicator:background_turn_indicator:polySurface1_polySurface55
+    4300014: turn_indicator:background_turn_indicator:polySurface1_polySurface58
+    4300016: turn_indicator:o_face_turn_indicator:polySurface1_polySurface10
+    4300018: turn_indicator:o_face_turn_indicator:polySurface1_polySurface54
+    4300020: turn_indicator:o_face_turn_indicator:polySurface1_polySurface57
+    4300022: turn_indicator:o_player_turn_indicator:polySurface1_polySurface20
+    4300024: turn_indicator:o_player_turn_indicator:polySurface1_polySurface27
+    4300026: turn_indicator:x_face_turn_indicator:polySurface1_polySurface11
+    4300028: turn_indicator:x_face_turn_indicator:polySurface1_polySurface56
+    4300030: turn_indicator:x_face_turn_indicator:polySurface1_polySurface59
+    4300032: turn_indicator:x_player_turn_indicator:polySurface1_polySurface12
+    4300034: turn_indicator:x_player_turn_indicator:polySurface1_polySurface19
+    4300036: undo_button:Default_undo_button:polySurface21_undo_button:polySurface29_polySurface29_undo_button:polySurface1
+    4300038: undo_button:Default_undo_button:polySurface21_undo_button:polySurface30_undo_button:polySurface1_polySurface30
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
