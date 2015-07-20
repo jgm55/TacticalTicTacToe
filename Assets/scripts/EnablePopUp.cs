@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class EnablePopUp : MonoBehaviour {
-	public GameObject enableThis;
+	public GameObject[] enableThis;
 	// Use this for initialization
 	void Start () {
 
@@ -13,6 +13,9 @@ public class EnablePopUp : MonoBehaviour {
 	
 	}
 	void OnMouseDown(){
-		enableThis.SetActive(!enableThis.activeSelf);
+		foreach(GameObject i in enableThis){
+			i.SetActive(!i.activeSelf);
+		}
+
 	}
 }
