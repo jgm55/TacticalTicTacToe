@@ -5,6 +5,8 @@ public class OnClickGoScene : MonoBehaviour {
 
     public string scene = "";
 
+    public float enableDelay = 0f;
+    float enableCounter = 0f;
 	// Use this for initialization
 	void Start () {
 	
@@ -12,11 +14,16 @@ public class OnClickGoScene : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+        enableCounter += Time.deltaTime;
 	}
 
     void OnMouseDown()
     {
-        Application.LoadLevel(scene);
+
+        if (enableCounter > enableDelay)
+        {
+            Application.LoadLevel(scene);
+        }
     }
 }
