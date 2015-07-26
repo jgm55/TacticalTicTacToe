@@ -94,7 +94,7 @@ public class PieceController : MonoBehaviour {
 
                 SceneProperties.heldPiece = true;
                 state = PieceState.HELD;
-                Debug.Log("ON MOUSE DOWN: " + state);
+//                Debug.Log("ON MOUSE DOWN: " + state);
             }
         }
     }
@@ -159,7 +159,7 @@ public class PieceController : MonoBehaviour {
 
                 Vector3 pos = transform.position;
                 moveDist = new Vector3((returnPlace.x - pos.x) / duration, (returnPlace.y - pos.y) / duration, 0);
-                Debug.Log("ON MOUSE UP: " + state);
+//                Debug.Log("ON MOUSE UP: " + state);
             }
             
         }

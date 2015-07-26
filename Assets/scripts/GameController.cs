@@ -71,8 +71,6 @@ public class GameController : MonoBehaviour {
             if (board.turn == SceneProperties.aiTurn && !moving)
             {
                 Move m = AI.makeMove(board);
-
-                Debug.Log("Move: " + m);
                 AnimationHelper.doMove(m);
                 this.move(m, true, true);                
 			}

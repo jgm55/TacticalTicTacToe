@@ -21,16 +21,15 @@ public class AI : MonoBehaviour {
 
 	public static Move makeMove(Board board){
         //If not the first move
-        if (!board.isFirstMove())
-        {
-            Debug.Log("Not First Move");
+        //if (!board.isFirstMove())
+        //{
             ScoreMove val = minimax(board, MAX_DEPTH, int.MinValue, int.MaxValue, true);
             Debug.Log(val.score);
             if (val.move != null)
             {
                 return val.move;
             }
-        }
+        //}
 
 		Debug.Log("Returning random Move");
 
@@ -172,33 +171,41 @@ public class AI : MonoBehaviour {
 		}
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="board"></param>
+    /// <returns> an Integer score for the board state for the computer player</returns>
+
 	static int hueristic(Board board){
         float h = 0;
+        const int MIDDLE_PIECE = 1;
+        const int HAND_PIECE = 100;
         int pieceNumber = getPieceNumber(board.turn);
         if (pieceNumber == board.positions[1][1])
         {
-            h += board.positions[1][1];
+            h += MIDDLE_PIECE;
         }
         if (pieceNumber == board.positions[1][2])
         {
-            h += board.positions[1][2];
+            h += MIDDLE_PIECE;
         }
         if (pieceNumber == board.positions[2][1])
         {
-            h += board.positions[2][1];
+            h += MIDDLE_PIECE;
         }
         if (pieceNumber == board.positions[2][2])
         {
-            h += board.positions[2][2];
+            h += MIDDLE_PIECE;
         }
-        h = Mathf.Pow(h / pieceNumber, 2);
-        if (board.turn == Board.PlayerTurn.O_TURN) {
-            h = h + 100 * (board.oPieces - board.xPieces);
-            h = -1*h;
+        h = Mathf.Pow(h, 2);
+        if (board.turn != Board.PlayerTurn.O_TURN) {
+            h = h + HAND_PIECE * (board.oPieces - board.xPieces);
+            //h = -1*h;
         }
         else
         {
-            h = h + 100 * (board.xPieces - board.oPieces);
+            h = h + HAND_PIECE * (board.xPieces - board.oPieces);
         }
         return (int)h;
         /*for (int i = 0; i < board.positions.Length; i++)
@@ -209,23 +216,4 @@ public class AI : MonoBehaviour {
             }
         }*/
 	}
-	/*
-	 *  if depth = 0 or node is a terminal node
-        return the heuristic value of node
-    if maximizingPlayer
-        bestValue := -∞
-        for each child of node
-            val := minimax(child, depth - 1, FALSE)
-            bestValue := max(bestValue, val)
-        return bestValue
-    else
-        bestValue := +∞
-        for each child of node
-            val := minimax(child, depth - 1, TRUE)
-            bestValue := min(bestValue, val)
-        return bestValue
-
-(* Initial call for maximizing player *)
-minimax(origin, depth, TRUE)
-*/
 }
