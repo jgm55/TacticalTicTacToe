@@ -26,18 +26,6 @@ public class GameController : MonoBehaviour {
 
 	public Board board;
 
-	//GUI Stuff
-	Vector2 resolution;
-	float resx;
-	float resy;
-	Rect xPiecesLeftRect;
-	Rect oPiecesLeftRect;
-	Rect winLabelRect;
-
-	Vector2 piecesLeftSize = new Vector2(180,30);
-	Vector2 winLabelSize = new Vector2(180,30);
-	Vector2 xPiecesLeftPos;
-	Vector2 oPiecesLeftPos;
 	const int FONT_SIZE = 40;
 
     ArrayList previousBoards;
@@ -49,16 +37,6 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
-		xPiecesLeftPos = new Vector2(1280 - piecesLeftSize.x, FONT_SIZE);
-		oPiecesLeftPos = new Vector2(0, FONT_SIZE);
-		
-		resolution = new Vector2(Screen.width, Screen.height);
-		resx = resolution.x/1280.0f; // 1280 is the x value of the working resolution
-		resy = resolution.y/800.0f; // 800 is the y value of the working resolution
-		xPiecesLeftRect = new Rect(xPiecesLeftPos.x*resx,xPiecesLeftPos.y*resy,piecesLeftSize.x*resx,piecesLeftSize.y*resy);
-		oPiecesLeftRect = new Rect(oPiecesLeftPos.x*resx,oPiecesLeftPos.y*resy,piecesLeftSize.x*resx,piecesLeftSize.y*resy);
-		winLabelRect = new Rect(resolution.x / 2 - winLabelSize.x,40*resy,winLabelSize.x * resx, winLabelSize.y*resy);
 
 		board = new Board(BOARD_SIZE, NUM_PIECES, Board.PlayerTurn.X_TURN);
         previousBoards = new ArrayList();
@@ -243,22 +221,5 @@ public class GameController : MonoBehaviour {
 
 	public bool canMove(int y,int x){
 		return BoardHelper.getInstance().getMovePositions(board, x,y).Count != 0;
-	}
-
-	void OnGUI(){
-		/*style.fontSize = FONT_SIZE;
-		GUI.Label(xPiecesLeftRect, "X Pieces: " + board.xPieces.ToString(), style);
-		GUI.Label(oPiecesLeftRect, "O Pieces: " + board.oPieces.ToString(), style);
-		//TODO: display player turn
-		if(board.turn == Board.PlayerTurn.O_WINS){
-			GUI.Label(winLabelRect, "O Wins!!!", style);
-		} else if(board.turn == Board.PlayerTurn.X_WINS){
-			GUI.Label(winLabelRect, "X Wins!!!", style);
-		} else if(board.turn == Board.PlayerTurn.O_TURN){
-			GUI.Label(winLabelRect, "O Turn...", style);
-		} else if(board.turn == Board.PlayerTurn.X_TURN){
-			GUI.Label(winLabelRect, "X Turn...", style);
-		}
-		//TODO: add highlighting of winning path*/
 	}
 }
