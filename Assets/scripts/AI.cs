@@ -21,15 +21,15 @@ public class AI : MonoBehaviour {
 
 	public static Move makeMove(Board board){
         //If not the first move
-        //if (!board.isFirstMove())
-        //{
+        if (!board.isFirstMove())
+        {
             ScoreMove val = minimax(board, MAX_DEPTH, int.MinValue, int.MaxValue, true);
             Debug.Log(val.score);
             if (val.move != null)
             {
                 return val.move;
             }
-        //}
+        }
 
 		Debug.Log("Returning random Move");
 
