@@ -21,6 +21,7 @@ public class Rotate : MonoBehaviour {
     {
         return canRotate;
     }
+
     public void setCanRotate(bool soundOn=true)
     {
         if(counter > TIME_ROTATE+.1f){

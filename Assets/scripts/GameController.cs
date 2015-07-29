@@ -70,10 +70,23 @@ public class GameController : MonoBehaviour {
 			}
 			doneCounter+=Time.deltaTime;
 		}
-
-        if (turnIndicator.GetComponent<Rotate>().getTurn() != this.board.turn)
+        if (board.turn != Board.PlayerTurn.O_WINS && board.turn != Board.PlayerTurn.X_WINS)
         {
-            flipSign();
+            if (turnIndicator.GetComponent<Rotate>().getTurn() != this.board.turn)
+            {
+                flipSign();
+            }
+        }
+        else
+        {
+            if (turnIndicator.GetComponent<Rotate>().getTurn() != Board.PlayerTurn.X_TURN && board.turn == Board.PlayerTurn.X_WINS)
+            {
+                flipSign();
+            }
+            else if (turnIndicator.GetComponent<Rotate>().getTurn() != Board.PlayerTurn.O_TURN && board.turn == Board.PlayerTurn.O_WINS)
+            {
+                flipSign();
+            }
         }
 	}
 
